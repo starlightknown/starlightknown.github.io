@@ -16,3 +16,4 @@
 
 Now the website should run locally with no errors, feel free to use this as a template and make changes into it for your own Protfolio.
 
+Feel free to raise issues if you find any bugs in the site. 
