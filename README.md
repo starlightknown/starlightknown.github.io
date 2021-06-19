@@ -14,6 +14,6 @@
 
 * Go to `index.html` and run it in live server
 
-Now the website should run locally with no errors, feel free to use this as a template and make changes into it for your own Protfolio.
+Now the website should run locally with no errors, feel free to use this as a template and make changes into it for your own Portfolio.
 
 Feel free to raise issues if you find any bugs in the site. 
