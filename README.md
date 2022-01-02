@@ -1,6 +1,6 @@
 ## Personal portfolio website 
 
-# Made using HTML, CSS, JS and bootstrap
+# Made using HTML, CSS, JS and Bootstrap
 
 * Steps to run the project locally:
 
