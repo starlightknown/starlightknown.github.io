@@ -26,6 +26,7 @@ s<body class="night">
 		<div class="taskbarApp" data-trigger="sAppsMenu"><i class="icon" data-icon="launchpad"></i></div>
 		<div class="taskbarApp open" data-window="files"><i class="icon" data-icon="finder"></i></div>
 		<div class="taskbarApp open" data-window="preview"><i class="icon" data-icon="preview"></i></div>
+		<div class="taskbarApp open" data-window="terminal"><i class="icon" data-icon="terminal"></i></div>
 		<div class="taskbarApp open" data-window="safari"><i class="icon" data-icon="safari"></i></div>
 		<div class="taskbarApp open" data-window="messages"><i class="icon" data-icon="messages"></i></div>
 		<div class="taskbarApp open" data-window="calendar"><i class="icon" data-icon="calendar"></i></div>
@@ -48,6 +49,10 @@ s<body class="night">
 			<div class="app" data-filter-item data-filters="preview">
 				<div class="icon" data-icon="preview" data-window="preview"></div>
 				<div class="name">Preview</div>
+			</div>
+			<div class="app" data-filter-item data-filters="terminal">
+				<div class="icon" data-icon="terminal" data-window="terminal"></div>
+				<div class="name">Terminal</div>
 			</div>
 			<div class="app" data-filter-item data-filters="safari">
 				<div class="icon" data-icon="safari" data-window="safari"></div>
@@ -652,10 +657,7 @@ s<body class="night">
 			</div>
 			<div class="window__body">
 				<div class="window__main anim sAppTerminal">
-					<div id="outputs" class="outputs"></div>
-					<div for="cmd-input" class="console-prompt-box">
-						<input id="input" type="text" class='console-input' placeholder=">" spellcheck="false" autocomplete="off">
-					</div>
+					<div id="root"></div>
 				</div>
 			</div>
 		</div>
@@ -669,6 +671,10 @@ s<body class="night">
 <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
 <script src='https://cdn.rawgit.com/desandro/masonry/master/dist/masonry.pkgd.min.js'></script>
 <script src='https://vjs.zencdn.net/5.4.6/video.js'></script><script  src="./script.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/react-simple-keyboard@2.1.113/build/index.min.js'></script><script  src="./script.js"></script>
 
 </body>
 </html>
