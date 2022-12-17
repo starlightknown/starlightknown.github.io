@@ -472,7 +472,7 @@ s<body class="night">
 		</div>
 
 		<div class="window nocm window--preferences window--minimized" data-window="preferences"
-			style="min-width:750px;height:530px;width:750px;min-height:530px;top:20%;left:35%;max-width:750px;max-height:530px;" handler="extended" resizable="false">
+			style="min-width:750px;height:530px;width:750px;min-height:530px;top:10%;left:35%;max-width:750px;max-height:530px;" handler="extended" resizable="false">
 			<div class="window__handler">
 				<div class="window__title">System Preferences</div>
 				<div class="window__controls">
@@ -516,7 +516,6 @@ s<body class="night">
 							<tr>
 								<td>Experimental:</td>
 								<td><label class="enableTestPanel"><button type="button">Toggle Dev Panel</button></label><br><br><label
-										class="clickable" data-trigger="window" data-window="terminal"><button type="button">Open terminal window</button></label><br><br><label
 										class="testCreateW"><button type="button">CreateWindow</button></label><br><br><label
 										class="testCreateWi"><button type="button">CreateWindow (with image)</button></label></td>
 							</tr>
@@ -645,7 +644,7 @@ s<body class="night">
 			</div>
 		</div>
 
-		<div class="window window--terminal window--minimized" data-window="terminal"
+		<div class="window nocm window window--terminal window--minimized" data-window="terminal"
 			style="width:600px;height:400px;top:16%;left:50%;">
 			<div class="window__handler">
 				<div class="window__title">Terminal</div>
@@ -657,7 +656,32 @@ s<body class="night">
 			</div>
 			<div class="window__body">
 				<div class="window__main anim sAppTerminal">
-					<div id="root"></div>
+					<div class="terminal-window primary-bg" onclick="document.getElementById('dummyKeyboard').focus();">
+
+                        <div class="terminal-output" id="terminalOutput">
+
+                          <div class="terminal-line">  
+                            <span class="help-msg">~Type <span class="code">help</span> for a list of supported commands.<br></span>
+                          </div>
+
+                        </div>
+
+                        <div class="terminal-line">
+                          <span class="success">➜</span> <span class="directory">~</span> <span class="user-input" id="userInput"></span>
+                          <input type="text" id="dummyKeyboard" class="dummy-keyboard">
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
 				</div>
 			</div>
 		</div>

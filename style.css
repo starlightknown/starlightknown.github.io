@@ -3155,6 +3155,9 @@ iframe::-webkit-resizer, iframe ::-webkit-scrollbar-corner {
 .icon[data-icon=messages] {
   background: url("img/system/icons/messages.png") !important;
 }
+.icon[data-icon=terminal] {
+  background: url("img/system/icons/terminal.png") !important;
+}
 .icon[data-icon=preview] {
   background: url("img/system/icons/apple_preview.png") !important;
 }
@@ -3531,118 +3534,38 @@ iframe::-webkit-resizer, iframe ::-webkit-scrollbar-corner {
   content: "";
 }
 
-/* terminal */
 
-#terminal {
-	width: 90vw;
-	max-width: 900px;
-	height: 550px;
-	transition: .2s;
+.terminal-line {
+  position: relative;
+  font-family: "Anonymous Pro", monospace;
+  font-size: 0.9rem;
+  color: #b7c5d2;
 }
-#window {
-	height: 40px;
-	display: flex;
-	align-items: center;
-	padding: 0 15px;
-	cursor: default;
+
+.directory {
+  color: #75e1e7;
+  font-weight: 500;
 }
-.btn {
-	margin-right: 10px;
-	border: none;
-	height: 13px;
-	width: 13px;
-	border-radius: 50%;
-	box-shadow: 0 2px 2px #33333375;
+
+.success {
+  color: #8dd39e;
 }
-.red {
-	background-color: #FF4136;
+
+.code,
+.error,
+.fa-heart {
+  color: #d7566a;
 }
-.error {
-	color: #FF4136;
+
+.fa-heart {
+  padding-top: 0.5rem;
 }
-.yellow {
-	background-color: #FFDC00;
+
+.dummy-keyboard {
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
-.info {
-	color: #FFDC00;
+
+::-webkit-scrollbar {
+  display: none;
 }
-.green {
-	background-color: #2ECC40;
-}
-#title,
-#field {
-	font-size: .85rem;
-}
-#title {
-	margin-left: auto;
-}
-#field {
-	height: calc(100% - 40px);
-	padding: 5px;
-	overflow: auto;
-/* 	I'd like to get white-space: break-spaces to work
-		but it won't for some reason. In the meantime,
-		overflow-wrap: break-word will have to do. */
-    overflow-wrap: break-word;
-  }
-  #field::-webkit-scrollbar {
-    width: 10px;
-  }
-  #field.dark::-webkit-scrollbar-thumb {
-    background-color: #333444;
-  }
-  #field.light::-webkit-scrollbar-thumb {
-    background-color: #ACA9BB;
-  }
-  #field>div {
-    min-height: 20px;
-    width: 100%;
-    cursor: default;
-  }
-  #input-container {
-    display: flex;
-  }
-  #query,
-  #cursor {
-    display: inline-block;
-  }
-  #query {
-    margin-right: 10px;
-    white-space: pre-line;
-  }
-  #cursor {
-    position: relative;
-    bottom: -2px;
-    left: 2px;
-    width: .5rem;
-    height: 3px;
-  }
-  @keyframes blink-dark {
-    0%, 100% {
-      background-color: #F4F4F4;
-    }
-    50% {
-      background-color: transparent;
-    }
-  }
-  @keyframes blink-light {
-    0%, 100% {
-      background-color: #474554;
-    }
-    50% {
-      background-color: transparent;
-    }
-  }
-  @media only screen and (max-width: 600px), (max-height: 600px) {
-    #terminal {
-      height: 100vh;
-      width: 100vw;
-      min-width: 100vw;
-    }
-    #field {
-      height: 100%;
-    }
-    #window {
-      display: none;
-    }
-  }
