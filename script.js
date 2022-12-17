@@ -1691,10 +1691,10 @@ $(document).ready(function() {
 const BLACKLISTED_KEY_CODES = [38];
 const COMMANDS = {
   help:
-    'Supported commands: <br><span class="code">whoami</span>, <span class="code">experience</span>, <span class="code">education</span>,<br> <span class="code">skills</span>, <span class="code">projects</span>, <span class="code">contact</span>, <span class="code">exit</span>,<br> ',
+    'Supported commands: <br><span class="code">whoami</span>, <span class="code">experience</span>, <span class="code">education</span>,<br> <span class="code">skills</span>, <span class="code">contact</span>, <span class="code">exit</span>,<br> ',
     // <span class="code">thewave</span>, <span class="code">fav_books</span>, <span class="code">fav_songs</span>,<br> <span class="code">fav_podcast</span>, <span class="code">fork</span>, <span class="code">ideas</span>,<br> <span class="code">quotes</span>, <span class="code">resume</span>,<br> <span class="code">extra_time</span>
     whoami:
-   "A regular hackathon hacker turned hackathon coach who enjoys assisting at events and improving the organizer and hacker experience at Major League Hacking. I am also a Google Season of Docs participant at AsyncAPI as a Technical Writer with a user focus. I've created tutorials and user manuals.<br>I use HTML, CSS, JavaScript, R, and Python. Always eager to learn new technologies and tools. I enjoy speaking at various conferences to hone my public speaking skills and share my story with people worldwide.<br>In my free time I do disro hopping, so far I have tried 13 Linux distros!<br>",
+   "A regular hackathon hacker turned hackathon coach who enjoys assisting at events and improving the organizer and hacker experience at Major League Hacking. I am also a Google Season of Docs participant at AsyncAPI as a Technical Writer with a user focus. I've created tutorials and user manuals.<br>I use HTML, CSS, JavaScript, R, and Python. Always eager to learn new technologies and tools. I enjoy speaking at various conferences to hone my public speaking skills and share my story with people worldwide.<br>In my free time I do disro hopping, so far I have tried 13 Linux distros!<br> Here are some of my talks/events I hosted <a href='https://www.youtube.com/playlist?list=PLg2hbSmyqB5akS_crKgfSGRYsD-dNbDRU' class='success link'>YouTube</a>",
    
    skills:
     '<span class="code">Languages:</span> HTML5, CSS3, Javascript, Python, R;<br><span class="code">Databases:</span>MySql ;<br><span class="code">Technologies:</span> Git ;<br><span class="code">Frameworks:</span> Django, Flask;',
@@ -1705,35 +1705,11 @@ const COMMANDS = {
   
     // resume: "Click this file:<a href='' class='success link'>resume.pdf</a>",
  
-    experience: "<span>Learner:-Coding Club India</span> : Worked under Mission Helix powered by Coding Club Indiato make Coding club as a Global Platform for Coders  , 05/2020 - 07/2020,   .<br><span>Campus Ambassador :-National Engineering Olympiad 3.0 </span> : Worked as campus ambassador in NEO 3.0 ,endorsed NEOaim to increase engineering aptitude, 03/2020 - 04/2020<br>",
+    experience: "<span>Hackathon Coach: Majp</span> : Assisting at hackathons/events and improving the organizer and hacker experience at Major League Hacking and impacting thousands of hackers and students across the globe.  , 07/2022 - Present, <br><span>Technical Writer Intern @ AsyncAPI:-Google Season of Docs  </span> : I wrote 3 user focused tutorials and guides at AsyncAPI, 05/2022 - 12/2022<br> <span>Intern :-Data on Kubernetes  </span> : On boarding new members to the community and helping them get started with the community projects. Developed graphics, illustrations and content for twitter and DoK events. Part of the community management team to help in the growth of the community., 06/2021 - 12/2021<br>",
 
   
     contact:
-    "You can contact me on any of following:<br><a href='https://www.linkedin.com/in/ashutosh-tripathi-8a5575181/' class='success link'>Linkedin</a> ,<a href='https://twitter.com/ashu8839' class='success link'> Twitter </a>, <a href='https://www.instagram.com/ashu__99_tripathi' class='success link'> Instagram </a>, <a href='https://github.com/Geeky-Ashu14' class='success link'>Github</a>",
-
-    projects:    "<a href=\"https://github.com/Geeky-Ashu14/ECommerce\"  >ECommerce web Application🎫🏪🕶️:</a> A model e-commerce web application made entirely using JAVA as back-end applying ORM principles of Hibernate Framework.<br><a href=\"https://github.com/Geeky-Ashu14/Event-management-Webapp\"  >✨Event Management Web application🎫:</a> A model web application for any event registeration and handlingusing JAVA(JSP+Servlet+JDBC) as back-end and MYSql for database. .<br><a href=\"https://github.com/Geeky-Ashu14/Library-management-system \">Library🏛️ Management System: </a> A 🌑dark themed library management desktop application🖥️ with modern look and feel with Java Swing & AWT using JDBC API for MySql database interaction. <br>",
-
-    exit:"Thank you for your visit <br>",
-    // thewave:"Currently I am working on Webwet.io!<br> Webwet is a website that tells the weather of different locations on earth.",
-
-    
-
-    // fav_songs:'1.Kill4Me by Marilyn Manson',
-
-    // fav_podcast:'1.How To get Rich by Naval ravikant',
-
-   
-
-    // fork:"I upload random projects on the following sites:<br><a href='https://codepen.io/UbaidRussell/pens/showcase' class='success link'>codepen.io</a> ,<a href='https://github.com/UbaidRussell' class='success link'>Github</a>,",
-
-    // ideas:' 1.Create cryptocurrency token sale.<br>2.Create Podcast<br>3.Create Blog<br> ',
-
-    
-
-    // quotes:'1."Spend more money OR Make more money.One will kill you."<br>2."It is both,dead and alive according to schrodingers cat."<br>3."If you want something,give something."<br>4."Judge Noone."<br>5."What did you create today?"<br>6."The clouds take any shape they want.I wish I was clouds."<br>7."The more you learn the easier it becomes to make money."<br>8."Give out some cheatcodes,I mean like why not?"<br>9."Take your time."<br>10."The more it matters who said it,the less it actually matters."',
-
-    // extra_time:'Chess club, Hackathon,a local starbucks',
-
+    "<br><a href='https://www.linkedin.com/in/starlightknown/' class='success link'>Linkedin</a> ,<a href='https://twitter.com/starlightknown' class='success link'> Twitter </a>, <a href='https://github.com/starlightknown' class='success link'>Github</a>",
   };
 let userInput, terminalOutput;
 
@@ -1818,3 +1794,4 @@ $(document).ready(function(){
       //alert("This is a tablet or desktop.");
     }
 });
+

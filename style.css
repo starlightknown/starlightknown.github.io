@@ -3607,8 +3607,10 @@ input[type=text], textarea {
 	top: 1px;
 }
 
-#title{
-  text-align: center; 
+.window--notes .window__handler .title {
+  position: absolute;
+  left: 35%;
+  text-align: center;
 }
 
 #text-body {
