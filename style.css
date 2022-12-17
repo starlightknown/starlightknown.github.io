@@ -1026,6 +1026,13 @@ video {
   height: 100%;
 }
 
+.window__body .notes {
+  position: absolute;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .window__body .calendar .ui-datepicker,
 .window__body .calendar .ui-datepicker table,
 .window__body .calendar .ui-datepicker tr,
@@ -3161,6 +3168,9 @@ iframe::-webkit-resizer, iframe ::-webkit-scrollbar-corner {
 .icon[data-icon=preview] {
   background: url("img/system/icons/apple_preview.png") !important;
 }
+.icon[data-icon=notes] {
+  background: url("img/system/icons/notes.png") !important;
+}
 .icon[data-icon=safari] {
   background: url("img/system/icons/safari.png") !important;
 }
@@ -3569,3 +3579,70 @@ iframe::-webkit-resizer, iframe ::-webkit-scrollbar-corner {
 ::-webkit-scrollbar {
   display: none;
 }
+
+
+.menu{
+	position: relative;
+	margin-top: 15px;
+  margin-bottom: 12px;
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	text-align: center;
+	font-size: 14px;
+	color: antiquewhite;
+	user-select: none; /* Chrome Opera */
+	-ms-user-select: none; /* IE */
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+}
+
+input[type=text], textarea {
+  color: antiquewhite;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+.navigation {
+	position: absolute;
+	top: 1px;
+}
+
+#title{
+  text-align: center; 
+}
+
+#text-body {
+  resize: none;
+  font-family: 'Consolas';
+  box-sizing: border-box;
+  height: calc(75vh - 40px);
+  width: 100%;
+  padding: 10px;
+}
+
+  /* width */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+	border-radius: 20px;
+	background: #313941;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+	background: rgb(31, 31, 31); 
+	border-radius: 20px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+	background: #242424; 
+  }
+
+  ::-webkit-scrollbar-corner{
+	display: hidden;
+  }

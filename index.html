@@ -26,6 +26,7 @@ s<body class="night">
 		<div class="taskbarApp" data-trigger="sAppsMenu"><i class="icon" data-icon="launchpad"></i></div>
 		<div class="taskbarApp open" data-window="files"><i class="icon" data-icon="finder"></i></div>
 		<div class="taskbarApp open" data-window="preview"><i class="icon" data-icon="preview"></i></div>
+		<div class="taskbarApp open" data-window="notes"><i class="icon" data-icon="notes"></i></div>
 		<div class="taskbarApp open" data-window="terminal"><i class="icon" data-icon="terminal"></i></div>
 		<div class="taskbarApp open" data-window="safari"><i class="icon" data-icon="safari"></i></div>
 		<div class="taskbarApp open" data-window="messages"><i class="icon" data-icon="messages"></i></div>
@@ -49,6 +50,10 @@ s<body class="night">
 			<div class="app" data-filter-item data-filters="preview">
 				<div class="icon" data-icon="preview" data-window="preview"></div>
 				<div class="name">Preview</div>
+			</div>
+			<div class="app" data-filter-item data-filters="notes">
+				<div class="icon" data-icon="notes" data-window="notes"></div>
+				<div class="name">Notes</div>
 			</div>
 			<div class="app" data-filter-item data-filters="terminal">
 				<div class="icon" data-icon="terminal" data-window="terminal"></div>
@@ -572,6 +577,28 @@ s<body class="night">
 				<div class="calendar"></div>
 			</div>
 		</div>
+<div class="window window--notes window--minimized" data-window="notes"
+		style="width:700px;height:500px;top:16%;left:50%;">
+		<div class="window__handler">
+			<div class="window__title">Notes</div>
+			<div class="window__controls">
+				<a class="window__close"></a>
+				<a class="window__minimize"></a>
+				<a class="window__maximize"></a>
+			</div>
+		</div>
+		<div class="window__body">
+			<div class="menu">
+				<!--<p>p</p>!-->
+				  <input type="text" id="title" placeholder="Title" maxlength="15">
+							<div class="navigation">
+								
+						</div>
+					  </div>
+				  <textarea id="text-body" placeholder="Start writting"></textarea>
+</div>
+</div>
+
 
 <div class="window window--preview window--minimized" data-window="preview"
 			style="width:700px;height:500px;top:16%;left:50%;">
