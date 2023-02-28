@@ -3,8 +3,17 @@ body {
 	color: #fff;
 	font-family: monospace;
 }
+.wrapper {
+  position: relative;
+}
 
+.terminal-icon{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .terminal {
+  display: none;
   background-color: #2D2D2D;
   color: #FFF;
   font-family: 'Ubuntu Mono', monospace;
@@ -37,6 +46,12 @@ body {
 
 .buttons {
   display: flex;
+}
+.terminal.open {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .close-button,
@@ -103,4 +118,43 @@ body {
 .prompt-text::-moz-selection {
   background-color: #81D4FA;
   color: #000;
+}
+
+.neonText {
+  color: #fff;
+  text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #0fa,
+      0 0 82px #0fa,
+      0 0 92px #0fa,
+      0 0 102px #0fa,
+      0 0 151px #0fa;
+}
+
+/* Additional styling */
+  
+body {
+  font-size: 18px;
+  font-family: "Vibur", sans-serif;
+  background-color: #010a01;
+}  
+
+h1, h2 {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+  
+h1 {
+    font-size: 4.2rem;
+}
+  
+h2 {
+    font-size: 1.8rem;
+}
+
+.container {
+  margin-top: 20vh;
 }
