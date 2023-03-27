@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Karita's Portfolio</title>
+    <title>Karuna's Portfolio</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/brands.min.css">
@@ -58,15 +58,6 @@
 		</div>  
 	  </div>
 
-	  <!-- Social links -->
-<aside class="_social-links">
-	<ul class="_links-list">
-		<li class="_social-link"><a href="https://twitter.com/starlightknown" target="_blank"><i class="fa-brands fa-twitter fa-bounce" style="color: #74c0fc;"></i></a></li>
-		<li class="_social-link"><a href="https://github.com/starlightknown" target="_blank"><i class="fa-brands fa-github fa-bounce"></i></a></li>
-		<li class="_social-link"><a href="mailto:karunatata63@gmail.com" target="_blank"><i class="fa-solid fa-at fa-bounce"></i></a></li>
-	</ul>
-</aside>
-<!-- ------------ -->
 	  <div class="indicator"></div>
     <section id="hero">
       <div class="container">
@@ -76,9 +67,15 @@
     </section>
     <section id="about">
       <div class="container">
-        <h2>About Me</h2>
+        <h2>About Me.</h2>
         <p>Hi, I'm Karita! I'm a designer and front-end developer with 5 years of experience in the industry. I'm passionate about creating beautiful and functional websites that provide a great user experience.</p>
         <p>I specialize in HTML, CSS, and JavaScript, and I'm also proficient in design tools such as Adobe Photoshop and Sketch. In my free time, I like to read design blogs, explore new web technologies, and work on personal projects.</p>
+        <a href="#" class="button">Hire Me</a>
+        <ul class="social-icons">
+          <li><i class="fa fa-twitter"></i></li>
+          <li><i class="fa fa-linkedin"></i></li>
+          <li><i class="fa fa-github"></i></li>
+        </ul>
       </div>
     </section>
     <section id="projects">
@@ -131,28 +128,87 @@
     <section id="blog">
       <div class="container">
         <h2>My Blog</h2>
-        <div class="grid">
-          <div class="item">
-            <img src="blog1.png" alt="Blog Post 1">
-            <h3>Blog Post 1</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
-            <a href="#">Read More</a>
-          </div>
-          <div class="item">
-            <img src="blog2.png" alt="Blog Post 2">
-            <h3>Blog Post 2</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
-            <a href="#">Read More</a>
-          </div>
-          <div class="item">
-            <img src="blog3.png" alt="Blog Post 3">
-            <h3>Blog Post 3</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
-            <a href="#">Read More</a>
-          </div>
-        </div>
+        <div id="blog-posts"></div>
+    
+        <style>
+  .post {
+    margin-bottom: 20px;
+  }
+  .post img {
+    width: 300px;
+    height: 300px;
+    margin-right: 20px;
+  }
+  .post h2 {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .post p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .post a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #0070c9;
+  }
+</style>
+    
+        <script>
+        const blogPostsDiv = document.getElementById('blog-posts');
+
+fetch('https://api.hashnode.com/', {
+  method: 'POST',
+  headers: {
+      'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+      query: `
+        query {
+          user(username: "starlightknown") {
+            publication {
+              posts(page: 0) {
+                title
+                brief
+                slug
+                coverImage
+              }
+            }
+          }
+        }
+      `,
+  }),
+})
+.then((response) => response.json())
+.then((data) => {
+  const posts = data.data.user.publication.posts;
+  let html = '';
+  posts.forEach((post) => {
+    const title = post.title;
+    const brief = post.brief;
+    const slug = post.slug;
+    const coverImage = post.coverImage;
+    html += `
+      <div class="post">
+        <img src="${coverImage}" alt="Blog Post Image">
+        <h2>${title}</h2>
+        <p>${brief}</p>
+        <a href="https://hashnode.com/${slug}" target="_blank">Learn More > </a>
+      </div>
+    `;
+  });
+  blogPostsDiv.innerHTML = html;
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
+
+        </script>
       </div>
     </section>
+    
     <section id="contact">
       <div class="container">
         <h2>Contact Me</h2>
@@ -165,17 +221,9 @@
         </form>
       </div>
     </section>
-    <footer>
-      <div class="container">
-        <p>&copy; 2023 Karita's Corner. All rights reserved.</p>
-        <ul>
-          <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-          <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-          <li><a href="#"><i class="fab fa-github"></i></a></li>
-        </ul>
-      </div>
-    </footer>
 	<script src="script.js"></script>
     <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/ea603c10d8.js"></script>
+    <!-- HTML to display the blog posts -->
   </body>
 </html>

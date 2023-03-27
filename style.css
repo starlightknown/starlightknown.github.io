@@ -8,12 +8,37 @@
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #f6f6f6;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+    line-height: 1.47059;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+  color: rgb(29,29,31);
+  background-color: rgb(255, 255, 255);
+  font-style: normal;
+  display: block;
 }
+
+.button {
+  background-color: #0070c9;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  margin: 0 auto;
+  max-width: 200px;
+}
+
+.button:hover {
+  background-color: #005ba3;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
 
 a {
   color: #333;
@@ -43,6 +68,10 @@ a {
   text-decoration: none;
 }
 
+.navbar-brand a:hover {
+  text-decoration: none;
+}
+
 .navbar-nav {
   display: inline-block;
   float: right;
@@ -59,12 +88,12 @@ a {
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
-  color: #000;
+  color:  #999999;
   text-decoration: none;
 }
 
 .navbar-nav li a:hover {
-  color: #ff69b4;
+  color: #000;
 }
 
 .wrapper {
@@ -255,44 +284,29 @@ a:hover {
 .green { background-color: rgb(42, 239, 190); }
 .blue { background-color: rgb(0, 140, 255); }
 
-/*  links sidebar CSS  */
-._social-links {
-	position: fixed;
-	right: 0;
-	top: 50%;
-	transform: translatey(-50%);
-	padding: 1em 0.5em 1em 1em;
-	background: #fafafa;
-	border-radius: 0.5em 0 0 0.5em;
-	box-shadow: -4px 0px 0px hotpink;
-	transition: all 300ms ease;
+.social-icons {
+  display: flex;
+  justify-content: center;
+  margin-top: -3px;
 }
 
-._social-links:hover {
-	box-shadow: -8px 0px 20px hotpink;
-	padding: 1em;
+.social-icons li {
+  display: inline-block;
+  margin-right: 15px;
+  margin-top: 10px;
+  font-size: 40px;
+  transition: all 1s;
 }
 
-._links-list {
-	list-style: none;
-	display: flex;
-	flex-direction: column;
-	gap: 1em;
-}
-._social-link a {
-	color: #111;
-	font-size: 1.5rem;
-	transition: all 200ms ease;
-}
-._social-link a:visited {
-	color: #111;
-}
-._social-link a:hover {
-	color: hotpink;
-	font-size: 1.75rem;
+.social-icons li:last-child {
+  margin-right: 0;
 }
 
-/* //////////////////////////// */
+.social-icons li:hover {
+  color: #888;
+  cursor: pointer;
+}
+
 
 /* Hero */
 
@@ -308,7 +322,7 @@ a:hover {
 }
 
 h1 {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 25vmin;
   line-height: 20vmin;
 }
@@ -368,15 +382,15 @@ h1 {
 #hero p {
   font-size: 24px;
   margin-bottom: 40px;
-  color: #ff69b4;
+  color: #1d1d1f;
 }
 
 #hero button {
   padding: 10px 20px;
   border: none;
-  background-color: #ff6b6b;
+  background-color: #0070c9;
   color: #fff;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 18px;
   font-weight: bold;
   border-radius: 5px;
@@ -385,7 +399,7 @@ h1 {
 }
 
 #hero button:hover {
-  background-color: #ff4c4c;
+  background-color: #0070c9;
 }
 
 /* About */
@@ -395,7 +409,7 @@ h1 {
 }
 
 #about h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -422,7 +436,7 @@ h1 {
 }
 
 #about .item h3 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -448,8 +462,15 @@ h1 {
   background-color: #f6f6f6;
 }
 
+#projects a {
+  color: #ca1107;
+}
+#projects a:hover {
+  text-decoration: none;
+}
+
 #projects h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -470,7 +491,7 @@ h1 {
 }
 
 #projects .item h3 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -496,7 +517,7 @@ h1 {
 }
 
 #experience h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -516,7 +537,7 @@ h1 {
 }
 
 #experience .item h3 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -544,8 +565,16 @@ h1 {
   background-color: #f6f6f6;
 }
 
+#blog a {
+color: #0070c9;
+}
+
+#blog a:hover {
+  text-decoration: none;
+}
+
 #blog h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'SF Pro Text', Helvetica;
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -566,7 +595,7 @@ h1 {
 }
 
 #blog .item h3 {
-font-family: 'Montserrat', sans-serif;
+font-family: 'SF Pro Text', Helvetica;
 font-size: 24px;
 font-weight: bold;
 margin-bottom: 20px;
@@ -592,7 +621,7 @@ background-color: #fff;
 }
 
 #contact h2 {
-font-family: 'Montserrat', sans-serif;
+font-family: 'SF Pro Text', Helvetica;
 font-size: 48px;
 font-weight: bold;
 margin-bottom: 20px;
@@ -609,6 +638,7 @@ font-size: 16px;
 font-weight: bold;
 display: block;
 margin-bottom: 10px;
+text-align: center;
 }
 
 #contact input[type=text],
@@ -629,36 +659,27 @@ height: 200px;
 }
 
 #contact button[type=submit] {
-background-color: #000;
-color: #fff;
-border: none;
-padding: 10px 20px;
-font-size: 16px;
-font-weight: bold;
-border-radius: 5px;
-cursor: pointer;
+  background-color: #0070c9;
+  border: none;
+  border-radius: 25px;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
 
 #contact button[type=submit]:hover {
-background-color: #fff;
-color: #000;
-}
-footer {
-  background-color: #ffe9f1;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  font-family: 'Open Sans', sans-serif;
+  background-color: #0264b5;
+  border: none;
+  border-radius: 25px;
+  color: #ffffff;
   font-size: 16px;
-  margin-top: 40px;
-}
-
-footer a {
-  color: #fff;
+  padding: 12px 24px;
+  text-align: center;
   text-decoration: none;
-  font-weight: bold;
+  display: inline-block;
 }
 
-footer a:hover {
-  color: #ff69b4;
-}
+
