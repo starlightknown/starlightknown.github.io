@@ -5,6 +5,8 @@
     <title>Karita's Portfolio</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/brands.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   </head>
   <body>
     <nav class="navbar">
@@ -18,10 +20,58 @@
 		  <li><a href="#">View Resume</a></li>
 		</ul>
 	  </nav>
+
+	  <div class="wrapper">
+		<!-- if you want to see the markers, remove d-none from them -->
+	
+		<!-- indicates dog position -->
+		<div class="marker red d-none"></div>
+	
+		<!-- indicates cursor position -->
+		<div class="marker green d-none"></div>
+	
+		<!-- indicates dog's 'facing position'-->
+		<div class="marker blue d-none"></div>
+	
+		<div class="dog">
+		  <div class="body-wrapper">
+			<div class="body img-bg"></div>
+		  </div>
+		  <div class="head-wrapper">
+			<div class="head img-bg"></div>
+		  </div>
+		  <div class="leg-wrapper">
+			<div class="leg one img-bg"></div>
+		  </div>
+		  <div class="leg-wrapper">
+			<div class="leg two img-bg"></div>
+		  </div>
+		  <div class="leg-wrapper">
+			<div class="leg three img-bg"></div>
+		  </div>
+		  <div class="leg-wrapper">
+			<div class="leg four img-bg"></div>
+		  </div>
+		  <div class="tail-wrapper">
+			<div class="tail img-bg"></div>
+		  </div>
+		</div>  
+	  </div>
+
+	  <!-- Social links -->
+<aside class="_social-links">
+	<ul class="_links-list">
+		<li class="_social-link"><a href="https://twitter.com/starlightknown" target="_blank"><i class="fa-brands fa-twitter fa-bounce" style="color: #74c0fc;"></i></a></li>
+		<li class="_social-link"><a href="https://github.com/starlightknown" target="_blank"><i class="fa-brands fa-github fa-bounce"></i></a></li>
+		<li class="_social-link"><a href="mailto:karunatata63@gmail.com" target="_blank"><i class="fa-solid fa-at fa-bounce"></i></a></li>
+	</ul>
+</aside>
+<!-- ------------ -->
+	  <div class="indicator"></div>
     <section id="hero">
       <div class="container">
-        <h1>Karita's Corner</h1>
-        <p>Designer and Front-End Developer</p>
+		  <h1 class="gradient-text">Karuna Tata<h1>
+        <p>Technical Writer</p>
       </div>
     </section>
     <section id="about">
@@ -125,6 +175,7 @@
         </ul>
       </div>
     </footer>
+	<script src="script.js"></script>
     <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
   </body>
 </html>
