@@ -3,21 +3,20 @@
   <head>
     <meta charset="UTF-8">
     <title>Karuna's Portfolio</title>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/brands.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   </head>
   <body>
     <nav class="navbar">
-		<a href="#" class="navbar-brand">Your Name</a>
+		<a href="#" class="navbar-brand">Karuna Tata</a>
 		<ul class="navbar-nav">
 		  <li><a href="#about">About</a></li>
 		  <li><a href="#projects">Projects</a></li>
 		  <li><a href="#experience">Experience</a></li>
 		  <li><a href="#blog">My Blog</a></li>
 		  <li><a href="#contact">Contact</a></li>
-		  <li><a href="#">View Resume</a></li>
+		  <li><a href="karuna_tata_resume.pdf">View Resume</a></li>
 		</ul>
 	  </nav>
 
@@ -60,67 +59,163 @@
 
 	  <div class="indicator"></div>
     <section id="hero">
-      <div class="container">
-		  <h1 class="gradient-text">Karuna Tata<h1>
-        <p>Technical Writer</p>
-      </div>
+      <script>
+        const hello = document.querySelector(".hello__div");
+        setInterval(hello__function, 20000);
+        function hello__function() {
+          hello.style.display = "none";
+          setTimeout(function () {
+            hello.style.display = "flex";
+          }, 10);
+        }
+      </script>
+       <div class="new__bg">
+         <div class="hello__div">
+           <svg class="hello__svg" viewBox="0 0 1230.94 414.57">
+             <path d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31 " transform="translate(311.08 476.02)" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:35px" />
+           </svg>
+         </div>
+       </div>
     </section>
+    
     <section id="about">
       <div class="container">
-        <h2>About Me.</h2>
-        <p>Hi, I'm Karita! I'm a designer and front-end developer with 5 years of experience in the industry. I'm passionate about creating beautiful and functional websites that provide a great user experience.</p>
-        <p>I specialize in HTML, CSS, and JavaScript, and I'm also proficient in design tools such as Adobe Photoshop and Sketch. In my free time, I like to read design blogs, explore new web technologies, and work on personal projects.</p>
-        <a href="#" class="button">Hire Me</a>
-        <ul class="social-icons">
-          <li><i class="fa fa-twitter"></i></li>
-          <li><i class="fa fa-linkedin"></i></li>
-          <li><i class="fa fa-github"></i></li>
-        </ul>
-      </div>
-    </section>
-    <section id="projects">
-      <div class="container">
-        <h2>Projects</h2>
-        <div class="grid">
-          <div class="item">
-            <img src="project1.png" alt="Project 1">
-            <h3>Project 1</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
-            <a href="#">View Demo</a>
+        <div class="about-content">
+          <div class="about-img">
+            <img src="74637789.png" alt="your-image-alt">
           </div>
-          <div class="item">
-            <img src="project2.png" alt="Project 2">
-            <h3>Project 2</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
-            <a href="#">View Demo</a>
-          </div>
-          <div class="item">
-            <img src="project3.png" alt="Project 3">
-            <h3>Project 3</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
-            <a href="#">View Demo</a>
+          <div class="about-text">
+            <h2>About Me.</h2>
+            <p>Hi, I'm Karuna Tata! As a technical writer with a background in data science and a passion for open-source, I bring a unique perspective to creating effective and user-friendly documentation.</p>
+            <p>My experience includes developing end-user tutorials and how-to guides, creating engineering diagrams, and collaborating with other developers to contribute to open-source projects. I'm also skilled in teaching and coaching, having worked as an APAC Hackathon Coach and delivered technical content on various topics in workshops and live streams. With a commitment to continual learning and growth, I strive to create high-quality documentation that helps users navigate complex technical concepts with ease.</p>
+            <a href="#" class="button">Hire Me</a>
+            <ul class="social-icons">
+              <li><a href="https://www.linkedin.com/in/starlightknown/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+              <li><a href="https://github.com/starlightknown" target="_blank"><i class="fa fa-github"></i></a></li>
+              <li><a href="https://twitter.com/starlightknown" target="_blank"><i class="fa fa-twitter"></i></a></li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
+    
+    <section id="projects">
+      <div class="container">
+        <h2>Projects</h2>
+        <div id="pinned-repos"></div>
+      </div>
+    
+      <script>
+       const pinnedReposQuery = `
+  query {
+    user(login: "starlightknown") {
+      pinnedItems(first: 6, types: [REPOSITORY]) {
+        nodes {
+          ... on Repository {
+            name
+            description
+            url
+            homepageUrl
+            primaryLanguage {
+              name
+              color
+            }
+            resourcePath
+            object(expression: "main") {
+              ... on Blob {
+                text
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+fetch('https://api.github.com/graphql', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer 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',
+  },
+  body: JSON.stringify({ query: pinnedReposQuery }),
+})
+  .then(res => res.json())
+  .then(data => {
+    const pinnedRepos = data.data.user.pinnedItems.nodes;
+
+    const pinnedReposDiv = document.getElementById('pinned-repos');
+
+    let html = '';
+
+    pinnedRepos.forEach(repo => {
+      const name = repo.name;
+      const description = repo.description || 'No description provided.';
+      const url = repo.url;
+      const homepageUrl = repo.homepageUrl;
+      const language = repo.primaryLanguage ? repo.primaryLanguage.name : 'N/A';
+      const languageColor = repo.primaryLanguage ? repo.primaryLanguage.color : 'grey';
+      const resourcePath = repo.resourcePath;
+      const readmeText = repo.object ? repo.object.text : null;
+      let imgUrl = null;
+
+      if (readmeText) {
+        const regex = /<img.*?src="(.*?)"/;
+        const match = regex.exec(readmeText);
+        if (match) {
+          imgUrl = match[1];
+        }
+      }
+
+      html += `
+        <div class="pinned-repo">
+          <div class="repo-header">
+            <h3><a href="${url}" target="_blank">${name}</a></h3>
+            <div class="repo-details">
+              <span class="language" style="background-color: ${languageColor}">${language}</span>
+              <span class="spacer"></span>
+              <a href="${homepageUrl}" target="_blank" class="view-live">View Live</a>
+              <a href="${url}" target="_blank" class="view-code">View Code</a>
+            </div>
+          </div>
+          ${imgUrl ? `<img src="${imgUrl}" alt="${name}">` : ''}
+          <p>${description}</p>
+        </div>
+      `;
+    });
+
+    pinnedReposDiv.innerHTML = html;
+  })
+  .catch(error => console.error(error));
+
+      </script>
+    </section>
+    
+    
     <section id="experience">
       <div class="container">
         <h2>Experience</h2>
         <div class="timeline">
           <div class="item">
-            <h3>Web Designer</h3>
-            <p>ABC Company (2018-2021)</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
+            <h3>Technical Writer (Intern)</h3>
+            <p>Google Season of Docs - AsyncAPI (May 2022-Dec 2022)</p>
+            <p>Wrote end-user tutorials and how-to guides from scratch and improved the documentation structure following the style guide.
+              Learned and implemented Information Architecture, and classified content under chosen content buckets.
+              I wrote sample code for tutorials to assist visual learners and created engineering diagrams with mermaid.js</p>
           </div>
           <div class="item">
-            <h3>Front-End Developer</h3>
-            <p>XYZ Agency (2016-2018)</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
+            <h3>APAC Hackathon Coach</h3>
+            <p>Major League Hacking (July 2022-Feb 2023)</p>
+            <p>Assisting organizers and improving hacker experience in Major League Hacking’s member hackathons across the Asia-Pacific.
+              Managing the execution of “Hosted By MLH” hackathons and delivering technical content on various topics such as Linux, Technical
+              Writing, Web development, and Open source in workshops and live streams.</p>
           </div>
           <div class="item">
-            <h3>UI/UX Designer</h3>
-            <p>123 Design Studio (2014-2016)</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut mi quis sapien rhoncus consectetur sed euismod lorem.</p>
+            <h3>Community Manager Intern (Intern)</h3>
+            <p>Data on Kubernetes (July 2021-Dec 2021)</p>
+            <p>Developed graphics, and illustrations and created and managed content for Twitter and DoK events.
+              Onboarding new members to the community and helping them get started with community projects.</p>
           </div>
         </div>
       </div>
@@ -130,79 +225,56 @@
         <h2>My Blog</h2>
         <div id="blog-posts"></div>
     
-        <style>
-  .post {
-    margin-bottom: 20px;
-  }
-  .post img {
-    width: 300px;
-    height: 300px;
-    margin-right: 20px;
-  }
-  .post h2 {
-    font-size: 24px;
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-  .post p {
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.5;
-  }
-  .post a {
-    display: inline-block;
-    margin-top: 10px;
-    color: #0070c9;
-  }
-</style>
-    
         <script>
-        const blogPostsDiv = document.getElementById('blog-posts');
+       const blogPostsDiv = document.getElementById('blog-posts');
 
-fetch('https://api.hashnode.com/', {
+fetch('https://api.hashnode.com/graphql', {
   method: 'POST',
   headers: {
-      'Content-Type': 'application/json',
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-      query: `
-        query {
-          user(username: "starlightknown") {
-            publication {
-              posts(page: 0) {
-                title
-                brief
-                slug
-                coverImage
-              }
+    query: `
+      query {
+        user(username: "starlightknown") {
+          publication {
+            posts(page: 0) {
+              title
+              brief
+              slug
+              coverImage
             }
           }
         }
-      `,
+      }
+    `,
   }),
 })
 .then((response) => response.json())
 .then((data) => {
   const posts = data.data.user.publication.posts;
-  let html = '';
-  posts.forEach((post) => {
-    const title = post.title;
-    const brief = post.brief;
-    const slug = post.slug;
-    const coverImage = post.coverImage;
-    html += `
-      <div class="post">
-        <img src="${coverImage}" alt="Blog Post Image">
+let html = '';
+posts.forEach((post) => {
+  const title = post.title;
+  const brief = post.brief;
+  const slug = post.slug;
+  const coverImage = post.coverImage;
+  html += `
+    <div class="post">
+      <img src="${coverImage}" alt="Blog Post Image">
+      <div class="content">
         <h2>${title}</h2>
         <p>${brief}</p>
-        <a href="https://hashnode.com/${slug}" target="_blank">Learn More > </a>
+        <a href="https://kcoder63.hashnode.dev/${slug}" target="_blank">Learn more &gt;</a>
       </div>
-    `;
-  });
-  blogPostsDiv.innerHTML = html;
+    </div>
+  `;
+});
+blogPostsDiv.innerHTML = html;
 })
 .catch((error) => {
   console.error('Error:', error);
+  blogPostsDiv.innerHTML = 'Failed to load blog posts. Please try again later.';
 });
 
         </script>
@@ -212,7 +284,7 @@ fetch('https://api.hashnode.com/', {
     <section id="contact">
       <div class="container">
         <h2>Contact Me</h2>
-        <p>Want to work with me or just say hello? Fill out the form below or send me an email at karita@karitascorner.com.</p>
+        <p>Want to work with me or just say hello? Fill out the form below or send me an email at karunatata63@gmail.com.</p>
         <form>
           <input type="text" placeholder="Name" required>
           <input type="email" placeholder="Email" required>
@@ -221,9 +293,9 @@ fetch('https://api.hashnode.com/', {
         </form>
       </div>
     </section>
-	<script src="script.js"></script>
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
-    <script src="https://use.fontawesome.com/ea603c10d8.js"></script>
+	<script src="script.js" defer></script>
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous" defer></script>
+    <script src="https://use.fontawesome.com/ea603c10d8.js" defer></script>
     <!-- HTML to display the blog posts -->
   </body>
 </html>
