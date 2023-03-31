@@ -137,7 +137,7 @@ fetch('https://api.github.com/graphql', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer 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',
+    'Authorization': 'Bearer ${process.env.GITHUB_TOKEN}',
   },
   body: JSON.stringify({ query: pinnedReposQuery }),
 })
