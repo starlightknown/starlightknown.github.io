@@ -702,6 +702,24 @@ height: 200px;
   text-decoration: none;
 }
 
+.view-live {
+  display: inline-block;
+  background-color: #0070c9;
+  color: #fff !important;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.view-live:hover {
+  background-color: #005ba3;
+  color: #fff;
+  text-decoration: none;
+}
+
+
 .hello__div {
   display: flex;
   justify-content: center;

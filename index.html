@@ -129,6 +129,7 @@
             <p>Language: ${project.language || 'Unknown'}</p>
             <p>Stars: ${project.stargazers_count}</p>
             <p>Last updated: ${new Date(project.updated_at).toLocaleDateString()}</p>
+            <a class="view-live" href="${project.homepage || project.html_url}" target="_blank">View Live</a>
           </div>
             `).join('');
             // Add the HTML to the projects container
