@@ -718,8 +718,19 @@ height: 200px;
   color: #fff;
   text-decoration: none;
 }
+.language {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #fff;
+  margin-right: 10px;
+  background-color: #444;
+}
 
-
+.spacer {
+  flex-grow: 1;
+}
 .hello__div {
   display: flex;
   justify-content: center;

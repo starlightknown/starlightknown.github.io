@@ -126,7 +126,8 @@
             <div class="project-card">
             <h3><a href="${project.html_url}" target="_blank">${project.name}</a></h3>
             <p>${project.description || ''}</p>
-            <p>Language: ${project.language || 'Unknown'}</p>
+            <span class="language" style="background-color: ${project.languageColor}">${project.language}</span>
+            <span class="spacer"></span>
             <p>Stars: ${project.stargazers_count}</p>
             <p>Last updated: ${new Date(project.updated_at).toLocaleDateString()}</p>
             <a class="view-live" href="${project.homepage || project.html_url}" target="_blank">View Live</a>
