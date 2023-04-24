@@ -100,98 +100,47 @@
     </section>
     
     <section id="projects">
-      <div class="container">
+      <div class="project-container">
         <h2>Projects</h2>
-        <div id="pinned-repos"></div>
+        <div id="projects-container"></div>
       </div>
     
       <script>
-       const pinnedReposQuery = `
-  query {
-    user(login: "starlightknown") {
-      pinnedItems(first: 6, types: [REPOSITORY]) {
-        nodes {
-          ... on Repository {
-            name
-            description
-            url
-            homepageUrl
-            primaryLanguage {
-              name
-              color
-            }
-            resourcePath
-            object(expression: "main") {
-              ... on Blob {
-                text
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-fetch('https://api.github.com/graphql', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ${process.env.GITHUB_TOKEN}',
-  },
-  body: JSON.stringify({ query: pinnedReposQuery }),
-})
-  .then(res => res.json())
-  .then(data => {
-    const pinnedRepos = data.data.user.pinnedItems.nodes;
-
-    const pinnedReposDiv = document.getElementById('pinned-repos');
-
-    let html = '';
-
-    pinnedRepos.forEach(repo => {
-      const name = repo.name;
-      const description = repo.description || 'No description provided.';
-      const url = repo.url;
-      const homepageUrl = repo.homepageUrl;
-      const language = repo.primaryLanguage ? repo.primaryLanguage.name : 'N/A';
-      const languageColor = repo.primaryLanguage ? repo.primaryLanguage.color : 'grey';
-      const resourcePath = repo.resourcePath;
-      const readmeText = repo.object ? repo.object.text : null;
-      let imgUrl = null;
-
-      if (readmeText) {
-        const regex = /<img.*?src="(.*?)"/;
-        const match = regex.exec(readmeText);
-        if (match) {
-          imgUrl = match[1];
-        }
-      }
-
-      html += `
-        <div class="pinned-repo">
-          <div class="repo-header">
-            <h3><a href="${url}" target="_blank">${name}</a></h3>
-            <div class="repo-details">
-              <span class="language" style="background-color: ${languageColor}">${language}</span>
-              <span class="spacer"></span>
-              <a href="${homepageUrl}" target="_blank" class="view-live">View Live</a>
-              <a href="${url}" target="_blank" class="view-code">View Code</a>
-            </div>
+        // Replace YOUR_USERNAME with your GitHub username
+        const url = 'https://api.github.com/users/starlightknown/repos';
+    
+        // Make a request to the GitHub API
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            // Filter out forked repositories
+            const nonForkedProjects = data.filter(project => !project.fork);
+            // Sort the remaining data by the number of stars in descending order
+            const sortedProjects = nonForkedProjects.sort((a, b) => b.stargazers_count - a.stargazers_count);
+            // Get the highest number of stars
+            const highestStars = sortedProjects[0].stargazers_count;
+            // Filter projects with the highest number of stars or less number of stars
+            const topProjects = sortedProjects.filter(project => project.stargazers_count <= highestStars).slice(0, 6);
+            // Create an HTML string for each project
+            const projectHtml = topProjects.map(project => `
+            <div class="project-card">
+            <h3><a href="${project.html_url}" target="_blank">${project.name}</a></h3>
+            <p>${project.description || ''}</p>
+            <p>Language: ${project.language || 'Unknown'}</p>
+            <p>Stars: ${project.stargazers_count}</p>
+            <p>Last updated: ${new Date(project.updated_at).toLocaleDateString()}</p>
           </div>
-          ${imgUrl ? `<img src="${imgUrl}" alt="${name}">` : ''}
-          <p>${description}</p>
-        </div>
-      `;
-    });
-
-    pinnedReposDiv.innerHTML = html;
-  })
-  .catch(error => console.error(error));
-
+            `).join('');
+            // Add the HTML to the projects container
+            document.getElementById('projects-container').innerHTML = projectHtml;
+          })
+          .catch(error => {
+            // Handle any errors
+            console.error('Error retrieving projects:', error);
+          });
+    
       </script>
     </section>
-    
     
     <section id="experience">
       <div class="container">

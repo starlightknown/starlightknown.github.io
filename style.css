@@ -674,77 +674,31 @@ height: 200px;
   margin-bottom: 50px;
 }
 
-#pinned-repos a {
-  text-decoration: none;
-  color: #fff;
-}
-#pinned-repos {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 1rem;
+#projects-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin: 40px;
 }
 
-.pinned-repo {
-  width: calc(50% - 1rem);
-  margin-bottom: 1rem;
+/* Styling for project cards */
+.project-card {
   background-color: #000;
   color: #fff;
-  padding: 1rem;
-  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
 }
 
-@media screen and (min-width: 768px) {
-  .pinned-repo {
-    width: calc(33.33% - 1rem);
-  }
-}
-
-.pinned-repo h3 {
-  font-size: 24px;
-  margin-bottom: 30px;
-}
-
-.pinned-repo p {
-  font-size: 16px;
-  margin-bottom: 20px;
-  margin-top: 30px;
-}
-
-
-.repo-details {
-  display: flex;
-  justify-content: center;
-}
-
-.language {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #fff;
-  margin-right: 10px;
-  background-color: #444;
-}
-
-.spacer {
-  flex-grow: 1;
-}
-
-.view-live, .view-code {
-  display: inline-block;
-  background-color: #0070c9;
-  color: #fff !important;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 14px;
-  margin-right: 10px;
+/* Styling for project card links */
+.project-card a {
+  color: #0070c9;
   text-decoration: none;
 }
 
-.view-live:hover, .view-code:hover {
-  background-color: #005ba3;
-  color: #fff;
+/* Styling for project card links on hover */
+.project-card a:hover {
   text-decoration: none;
 }
 
