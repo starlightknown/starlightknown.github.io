@@ -770,3 +770,65 @@ height: 200px;
   }
 }
 
+#blender-portfolio {
+  padding: 40px 0;
+  text-align: center;
+  background-color: #111;
+  color: #fff;
+  position: relative; /* Added position relative */
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.video-item {
+  position: relative;
+  width: 320px;
+  height: 180px;
+  margin: 10px;
+  overflow: hidden;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  filter: brightness(70%);
+}
+
+.video-item:hover {
+  transform: scale(1.05);
+  filter: brightness(100%);
+}
+
+.video-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.3s ease;
+}
+
+.video-item:hover video {
+  filter: brightness(120%);
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-item:hover .video-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css');

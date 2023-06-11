@@ -412,3 +412,19 @@ function init() {
   
 window.addEventListener('DOMContentLoaded', init)
 
+
+const videoItems = document.querySelectorAll('.video-item');
+
+videoItems.forEach((item) => {
+  const video = item.querySelector('video');
+  item.addEventListener('mouseenter', () => {
+    video.play();
+  });
+  item.addEventListener('mouseleave', () => {
+    video.pause();
+    video.currentTime = 0;
+  });
+});
+
+
+
