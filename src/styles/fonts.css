@@ -1,0 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,400;500;600&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap");
+
+@theme inline {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "DM Sans", Arial, sans-serif;
+  --font-mono: "DM Mono", monospace;
+}
