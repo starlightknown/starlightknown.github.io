@@ -174,7 +174,7 @@ function ScratchIntro() {
             AVAILABLE FOR GOOD TROUBLE
           </span>
         </div>
-        <div ref={cardRef} className="relative aspect-[4/3] min-h-[330px] overflow-hidden bg-[#f4f1e8]">
+        <div ref={cardRef} className="relative aspect-[4/5] sm:aspect-[4/3] sm:min-h-[330px] overflow-hidden bg-[#f4f1e8]">
           <div className="absolute inset-0 flex flex-col items-center justify-center px-7 text-center text-black">
             <span className="mb-5 inline-flex size-12 items-center justify-center rounded-full bg-[#139f58]">
               <Sparkles className="size-5" />
@@ -255,7 +255,7 @@ export default function App() {
         </nav>
       </header>
 
-      <section id="top" className="relative mx-auto grid max-w-[1440px] gap-14 px-5 pb-24 pt-16 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20 lg:px-12 lg:pb-32 lg:pt-24">
+      <section id="top" className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-14 px-5 pb-24 pt-16 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20 lg:px-12 lg:pb-32 lg:pt-24">
         <div className="relative z-10">
           <div className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">
             <MapPin className="size-4 text-[#139f58]" /> Bangalore, India
