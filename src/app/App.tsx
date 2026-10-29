@@ -14,6 +14,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import CoinCursor from "./imports/CoinCursor-2030-54";
+import SiteCursor from "./components/SiteCursor";
+import StarBuddy, { CARD_REVEALED_EVENT } from "./components/StarBuddy";
 
 const experience = [
   {
@@ -94,8 +96,11 @@ function ScratchIntro() {
   const lastPoint = useRef<{ x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false });
+  const [revealed, setRevealed] = useState(false);
+  const [burst, setBurst] = useState(0);
 
   const paintCover = useCallback(() => {
+    setRevealed(false);
     const canvas = canvasRef.current;
     const card = cardRef.current;
     if (!canvas || !card) return;
@@ -151,6 +156,25 @@ function ScratchIntro() {
     [ready],
   );
 
+  // Once most of the cover is gone, fade the rest and celebrate
+  const checkReveal = () => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d", { willReadFrequently: true });
+    if (revealed || !canvas || !context) return;
+    const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+    let cleared = 0;
+    let sampled = 0;
+    for (let alpha = 3; alpha < data.length; alpha += 4 * 37) {
+      sampled++;
+      if (data[alpha] === 0) cleared++;
+    }
+    if (cleared / sampled > 0.55) {
+      setRevealed(true);
+      setBurst((value) => value + 1);
+      window.dispatchEvent(new Event(CARD_REVEALED_EVENT));
+    }
+  };
+
   const pointFromEvent = (event: React.PointerEvent<HTMLCanvasElement>) => {
     setCursor({ x: event.clientX, y: event.clientY, visible: true });
     if (scratching.current) erase(event.clientX, event.clientY);
@@ -194,7 +218,9 @@ function ScratchIntro() {
           </div>
           <canvas
             ref={canvasRef}
-            className="absolute inset-0 z-10 size-full touch-none cursor-none"
+            className={`absolute inset-0 z-10 size-full touch-none cursor-none transition-opacity duration-700 ${
+              revealed ? "pointer-events-none opacity-0" : ""
+            }`}
             aria-label="Scratch to reveal Karuna's introduction"
             onPointerDown={(event) => {
               scratching.current = true;
@@ -206,14 +232,42 @@ function ScratchIntro() {
             onPointerUp={() => {
               scratching.current = false;
               lastPoint.current = null;
+              checkReveal();
             }}
             onPointerEnter={(event) => setCursor({ x: event.clientX, y: event.clientY, visible: true })}
             onPointerLeave={() => setCursor((value) => ({ ...value, visible: false }))}
           />
         </div>
       </div>
+      {burst > 0 && (
+        <div key={burst} aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 z-30">
+          {Array.from({ length: 20 }, (_, index) => {
+            const angle = (index / 20) * Math.PI * 2;
+            const distance = 140 + (index % 3) * 70;
+            return (
+              <motion.span
+                key={index}
+                className="absolute -translate-x-1/2 -translate-y-1/2 text-2xl"
+                style={{ color: ["#f4ed45", "#139f58", "#111"][index % 3] }}
+                initial={{ x: 0, y: 0, scale: 0, opacity: 1, rotate: 0 }}
+                animate={{
+                  x: Math.cos(angle) * distance,
+                  y: Math.sin(angle) * distance,
+                  scale: [0, 1.5, 0.6],
+                  opacity: [1, 1, 0],
+                  rotate: 220,
+                }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+              >
+                ✦
+              </motion.span>
+            );
+          })}
+        </div>
+      )}
       <button
         type="button"
+        data-cursor="reset"
         onClick={paintCover}
         className="mt-5 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-white/60 transition-colors hover:text-[#f4ed45]"
       >
@@ -248,6 +302,7 @@ export default function App() {
           </div>
           <a
             href="mailto:karunatata63@gmail.com"
+            data-cursor="hi!"
             className="group flex items-center gap-2 bg-[#139f58] px-4 py-2 font-mono text-[11px] font-bold uppercase text-black transition-colors hover:bg-[#f4ed45]"
           >
             Say hello <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -428,6 +483,7 @@ export default function App() {
                   </div>
                   <a
                     href={video.url}
+                    data-cursor="watch"
                     target="_blank"
                     rel="noreferrer"
                     aria-label={`Watch ${video.title} on YouTube`}
@@ -445,7 +501,7 @@ export default function App() {
       <footer className="bg-[#f4f1e8] text-black">
         <div className="mx-auto max-w-[1440px] px-5 pb-8 pt-24 sm:px-8 lg:px-12 lg:pt-32">
           <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-black/45">Building for developers—or a community around them?</p>
-          <a href="mailto:karunatata63@gmail.com" className="group mt-6 flex items-end justify-between border-b-2 border-black pb-4">
+          <a href="mailto:karunatata63@gmail.com" data-cursor="email" className="group mt-6 flex items-end justify-between border-b-2 border-black pb-4">
             <span className="font-display text-[clamp(3.3rem,10vw,9rem)] leading-[0.8] tracking-[-0.055em]">Let&apos;s make it.</span>
             <ArrowUpRight className="mb-1 size-10 transition-transform group-hover:-translate-y-2 group-hover:translate-x-2 sm:size-20" strokeWidth={1.2} />
           </a>
@@ -459,6 +515,8 @@ export default function App() {
           </div>
         </div>
       </footer>
+      <StarBuddy />
+      <SiteCursor />
     </main>
   );
 }
