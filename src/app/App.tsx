@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   Asterisk,
   Github,
+  Instagram,
   Linkedin,
   Mail,
   MapPin,
@@ -477,10 +478,11 @@ export default function App() {
           </a>
           <div className="mt-10 flex flex-col gap-6 font-mono text-[11px] font-bold uppercase tracking-wider sm:flex-row sm:items-center sm:justify-between">
             <span>© {new Date().getFullYear()} Karuna Tata · Built with curiosity</span>
-            <div className="flex gap-5">
+            <div className="flex flex-wrap gap-x-5 gap-y-3">
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="mailto:karunatata63@gmail.com"><Mail className="size-4" /> Email</a>
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="https://www.linkedin.com/in/starlightknown/" target="_blank" rel="noreferrer"><Linkedin className="size-4" /> LinkedIn</a>
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="https://github.com/starlightknown" target="_blank" rel="noreferrer"><Github className="size-4" /> GitHub</a>
+              <a className="flex items-center gap-2 hover:text-[#139f58]" href="https://www.instagram.com/orbitingstart/" target="_blank" rel="noreferrer"><Instagram className="size-4" /> Instagram</a>
             </div>
           </div>
         </div>
