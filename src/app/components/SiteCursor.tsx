@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import { isEnteringIframe } from "./pointer";
 
 const INTERACTIVE = "a, button, [data-cursor]";
 const SPARKLE_COLORS = ["#f4ed45", "#139f58", "#f4f1e8"];
 
+// Bubble text for links and buttons that don't set their own data-cursor
+function labelFor(element: HTMLElement) {
+  if (element.dataset.cursor) return element.dataset.cursor;
+  if (element instanceof HTMLAnchorElement) return element.target === "_blank" ? "open" : "go";
+  return "click";
+}
+
 // Site-wide cursor: a dot that tracks the pointer exactly, a ring that trails
 // behind it and grows over links, and a light star trail when moving fast.
-// Only mounts for mouse/trackpad users; touch devices keep native behaviour.
+// Only mounts for fine pointers (mouse, trackpad, pen); touch keeps native behaviour.
 export default function SiteCursor() {
   const [enabled, setEnabled] = useState(false);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -46,19 +54,19 @@ export default function SiteCursor() {
     };
 
     const onMove = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") return;
+      if (event.pointerType === "touch") return;
       const speed = Math.hypot(event.clientX - target.x, event.clientY - target.y);
       target.x = event.clientX;
       target.y = event.clientY;
 
-      const element = event.target as Element | null;
+      const element = event.target instanceof Element ? event.target : null;
       // The scratch card draws its own coin cursor
       const overCanvas = element?.closest("canvas") != null;
       const interactive = element?.closest(INTERACTIVE) as HTMLElement | null;
       const root = document.documentElement;
       root.dataset.siteCursor = overCanvas ? "hidden" : interactive ? "hover" : "default";
       if (labelRef.current) {
-        labelRef.current.textContent = interactive?.dataset.cursor ?? "";
+        labelRef.current.textContent = interactive ? labelFor(interactive) : "";
       }
 
       const now = performance.now();
@@ -71,6 +79,10 @@ export default function SiteCursor() {
     const onDown = () => document.documentElement.classList.add("site-cursor-pressed");
     const onUp = () => document.documentElement.classList.remove("site-cursor-pressed");
     const onLeave = () => (document.documentElement.dataset.siteCursor = "hidden");
+    // Iframes show their own native cursor and swallow pointer events
+    const onOut = (event: PointerEvent) => {
+      if (isEnteringIframe(event)) onLeave();
+    };
 
     const tick = () => {
       const ease = reducedMotion ? 1 : 0.2;
@@ -84,6 +96,8 @@ export default function SiteCursor() {
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    window.addEventListener("pointerout", onOut);
     document.documentElement.addEventListener("pointerleave", onLeave);
     frame = requestAnimationFrame(tick);
 
@@ -92,6 +106,8 @@ export default function SiteCursor() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      window.removeEventListener("pointerout", onOut);
       document.documentElement.removeEventListener("pointerleave", onLeave);
       document.documentElement.classList.remove("has-site-cursor", "site-cursor-pressed");
       delete document.documentElement.dataset.siteCursor;

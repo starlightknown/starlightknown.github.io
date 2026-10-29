@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT, isEnteringIframe } from "./pointer";
 
 const LINES = [
   "psst… scratch the card up top ✦",
@@ -12,46 +13,79 @@ const LINES = [
   "Go look at the donut. Trust me. 🍩",
 ];
 
-export const CARD_REVEALED_EVENT = "card-revealed";
+const REVEAL_LINE = "You found the human! ✦✦✦";
 
 // A small star mascot that floats in the corner, watches the pointer,
 // and says something when clicked.
 export default function StarBuddy() {
   const buddyRef = useRef<HTMLButtonElement>(null);
-  const [look, setLook] = useState({ x: 0, y: 0 });
+  const leftEyeRef = useRef<SVGEllipseElement>(null);
+  const rightEyeRef = useRef<SVGEllipseElement>(null);
   const [line, setLine] = useState<string | null>(null);
   const [spins, setSpins] = useState(0);
+  const reducedMotion = useReducedMotion();
   const nextLine = useRef(1);
   const hideTimer = useRef<number | undefined>(undefined);
+  const greetTimer = useRef<number | undefined>(undefined);
 
   const say = (text: string, duration = 4500) => {
+    // Anything said before the greeting fires takes its place
+    window.clearTimeout(greetTimer.current);
     setLine(text);
     window.clearTimeout(hideTimer.current);
     hideTimer.current = window.setTimeout(() => setLine(null), duration);
   };
 
   useEffect(() => {
-    const greet = window.setTimeout(() => say(LINES[0], 5000), 2500);
+    greetTimer.current = window.setTimeout(() => say(LINES[0], 5000), 2500);
     const onReveal = () => {
       setSpins((value) => value + 1);
-      say("You found the human! ✦✦✦");
+      say(REVEAL_LINE);
     };
-    const onMove = (event: PointerEvent) => {
+    const onCovered = () => setLine((current) => (current === REVEAL_LINE ? null : current));
+
+    // Eyes are moved through refs, at most once per frame, to avoid a React
+    // render on every pointer event
+    let pointer: { x: number; y: number } | null = null;
+    let frame = 0;
+    const placeEyes = () => {
+      frame = 0;
+      let lookX = 0;
+      let lookY = 0;
       const rect = buddyRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      const dx = event.clientX - (rect.left + rect.width / 2);
-      const dy = event.clientY - (rect.top + rect.height / 2);
-      const distance = Math.hypot(dx, dy) || 1;
-      const reach = Math.min(distance / 120, 1) * 3.5;
-      setLook({ x: (dx / distance) * reach, y: (dy / distance) * reach });
+      if (pointer && rect) {
+        const dx = pointer.x - (rect.left + rect.width / 2);
+        const dy = pointer.y - (rect.top + rect.height / 2);
+        const distance = Math.hypot(dx, dy) || 1;
+        const reach = Math.min(distance / 120, 1) * 3.5;
+        lookX = (dx / distance) * reach;
+        lookY = (dy / distance) * reach;
+      }
+      leftEyeRef.current?.setAttribute("transform", `translate(${lookX} ${lookY})`);
+      rightEyeRef.current?.setAttribute("transform", `translate(${lookX} ${lookY})`);
     };
+    const track = (next: typeof pointer) => {
+      pointer = next;
+      if (!frame) frame = requestAnimationFrame(placeEyes);
+    };
+    const onMove = (event: PointerEvent) => track({ x: event.clientX, y: event.clientY });
+    // Look straight ahead when the pointer leaves for an iframe or the window
+    const onOut = (event: PointerEvent) => {
+      if (event.relatedTarget === null || isEnteringIframe(event)) track(null);
+    };
+
     window.addEventListener(CARD_REVEALED_EVENT, onReveal);
+    window.addEventListener(CARD_COVERED_EVENT, onCovered);
     window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerout", onOut);
     return () => {
-      window.clearTimeout(greet);
+      cancelAnimationFrame(frame);
+      window.clearTimeout(greetTimer.current);
       window.clearTimeout(hideTimer.current);
       window.removeEventListener(CARD_REVEALED_EVENT, onReveal);
+      window.removeEventListener(CARD_COVERED_EVENT, onCovered);
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerout", onOut);
     };
   }, []);
 
@@ -63,7 +97,7 @@ export default function StarBuddy() {
 
   return (
     <div className="pointer-events-none fixed bottom-4 right-4 z-[60] flex flex-col items-end sm:bottom-6 sm:right-6">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {line && (
           <motion.p
             key={line}
@@ -90,7 +124,7 @@ export default function StarBuddy() {
         <motion.svg
           viewBox="0 0 100 100"
           className="size-full overflow-visible drop-shadow-[3px_3px_0_#111]"
-          animate={{ rotate: spins * 360 }}
+          animate={{ rotate: reducedMotion ? 0 : spins * 360 }}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           transition={{ type: "spring", stiffness: 160, damping: 14 }}
@@ -103,8 +137,8 @@ export default function StarBuddy() {
             strokeLinejoin="round"
           />
           <g className="star-buddy-eyes">
-            <ellipse cx={43 + look.x} cy={47 + look.y} rx="3.2" ry="4.2" fill="#111" />
-            <ellipse cx={57 + look.x} cy={47 + look.y} rx="3.2" ry="4.2" fill="#111" />
+            <ellipse ref={leftEyeRef} cx="43" cy="47" rx="3.2" ry="4.2" fill="#111" />
+            <ellipse ref={rightEyeRef} cx="57" cy="47" rx="3.2" ry="4.2" fill="#111" />
           </g>
           <circle cx="37" cy="56" r="3.5" fill="#ff8fa3" opacity="0.7" />
           <circle cx="63" cy="56" r="3.5" fill="#ff8fa3" opacity="0.7" />

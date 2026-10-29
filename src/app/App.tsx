@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -16,7 +16,8 @@ import {
 import CoinCursor from "./imports/CoinCursor-2030-54";
 import ArtGallery from "./components/ArtGallery";
 import SiteCursor from "./components/SiteCursor";
-import StarBuddy, { CARD_REVEALED_EVENT } from "./components/StarBuddy";
+import StarBuddy from "./components/StarBuddy";
+import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT } from "./components/pointer";
 
 const experience = [
   {
@@ -98,10 +99,11 @@ function ScratchIntro() {
   const [ready, setReady] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false });
   const [revealed, setRevealed] = useState(false);
+  const revealedRef = useRef(false);
   const [burst, setBurst] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   const paintCover = useCallback(() => {
-    setRevealed(false);
     const canvas = canvasRef.current;
     const card = cardRef.current;
     if (!canvas || !card) return;
@@ -128,9 +130,21 @@ function ScratchIntro() {
 
   useEffect(() => {
     paintCover();
-    window.addEventListener("resize", paintCover);
-    return () => window.removeEventListener("resize", paintCover);
+    // A revealed card stays revealed; only an unrevealed cover is redrawn to fit
+    const onResize = () => {
+      if (!revealedRef.current) paintCover();
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [paintCover]);
+
+  const coverAgain = () => {
+    revealedRef.current = false;
+    setRevealed(false);
+    setBurst(0);
+    paintCover();
+    window.dispatchEvent(new Event(CARD_COVERED_EVENT));
+  };
 
   const erase = useCallback(
     (clientX: number, clientY: number) => {
@@ -161,7 +175,7 @@ function ScratchIntro() {
   const checkReveal = () => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
-    if (revealed || !canvas || !context) return;
+    if (revealedRef.current || !canvas || !context) return;
     const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
     let cleared = 0;
     let sampled = 0;
@@ -170,6 +184,7 @@ function ScratchIntro() {
       if (data[alpha] === 0) cleared++;
     }
     if (cleared / sampled > 0.55) {
+      revealedRef.current = true;
       setRevealed(true);
       setBurst((value) => value + 1);
       window.dispatchEvent(new Event(CARD_REVEALED_EVENT));
@@ -177,8 +192,17 @@ function ScratchIntro() {
   };
 
   const pointFromEvent = (event: React.PointerEvent<HTMLCanvasElement>) => {
-    setCursor({ x: event.clientX, y: event.clientY, visible: true });
+    // Fingers don't need a coin drawn under them
+    if (event.pointerType !== "touch") setCursor({ x: event.clientX, y: event.clientY, visible: true });
     if (scratching.current) erase(event.clientX, event.clientY);
+  };
+
+  // Shared by pointerup and pointercancel, so an interrupted scratch still ends cleanly
+  const endScratch = () => {
+    if (!scratching.current) return;
+    scratching.current = false;
+    lastPoint.current = null;
+    checkReveal();
   };
 
   return (
@@ -227,17 +251,16 @@ function ScratchIntro() {
               erase(event.clientX, event.clientY);
             }}
             onPointerMove={pointFromEvent}
-            onPointerUp={() => {
-              scratching.current = false;
-              lastPoint.current = null;
-              checkReveal();
+            onPointerUp={endScratch}
+            onPointerCancel={endScratch}
+            onPointerEnter={(event) => {
+              if (event.pointerType !== "touch") setCursor({ x: event.clientX, y: event.clientY, visible: true });
             }}
-            onPointerEnter={(event) => setCursor({ x: event.clientX, y: event.clientY, visible: true })}
             onPointerLeave={() => setCursor((value) => ({ ...value, visible: false }))}
           />
         </div>
       </div>
-      {burst > 0 && (
+      {burst > 0 && !reducedMotion && (
         <div key={burst} aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 z-30">
           {Array.from({ length: 20 }, (_, index) => {
             const angle = (index / 20) * Math.PI * 2;
@@ -266,14 +289,14 @@ function ScratchIntro() {
       <button
         type="button"
         data-cursor="reset"
-        onClick={paintCover}
+        onClick={coverAgain}
         className="mt-5 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-white/60 transition-colors hover:text-[#f4ed45]"
       >
         <RefreshCw className="size-3.5" /> Cover it up again
       </button>
       {cursor.visible && (
         <div
-          className="pointer-events-none fixed left-0 top-0 z-50 hidden size-[88px] -translate-x-1/2 -translate-y-1/2 md:block"
+          className="pointer-events-none fixed left-0 top-0 z-50 size-[88px] -translate-x-1/2 -translate-y-1/2"
           style={{ transform: `translate3d(${cursor.x - 44}px, ${cursor.y - 44}px, 0)` }}
         >
           <CoinCursor />
