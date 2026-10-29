@@ -9,6 +9,7 @@ const LINES = [
   "Fun fact: I was a 1950 rupee in a past life. Long story.",
   "Support tickets are just feature requests in disguise.",
   "Ship it! (after the docs, please)",
+  "Go look at the donut. Trust me. 🍩",
 ];
 
 export const CARD_REVEALED_EVENT = "card-revealed";
