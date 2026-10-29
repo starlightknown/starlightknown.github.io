@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowDown,
   ArrowUpRight,
   Asterisk,
-  Check,
   Github,
+  Instagram,
   Linkedin,
   Mail,
   MapPin,
@@ -14,6 +14,10 @@ import {
   Sparkles,
 } from "lucide-react";
 import CoinCursor from "./imports/CoinCursor-2030-54";
+import ArtGallery from "./components/ArtGallery";
+import SiteCursor from "./components/SiteCursor";
+import StarBuddy from "./components/StarBuddy";
+import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT } from "./components/pointer";
 
 const experience = [
   {
@@ -94,6 +98,10 @@ function ScratchIntro() {
   const lastPoint = useRef<{ x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false });
+  const [revealed, setRevealed] = useState(false);
+  const revealedRef = useRef(false);
+  const [burst, setBurst] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   const paintCover = useCallback(() => {
     const canvas = canvasRef.current;
@@ -122,9 +130,21 @@ function ScratchIntro() {
 
   useEffect(() => {
     paintCover();
-    window.addEventListener("resize", paintCover);
-    return () => window.removeEventListener("resize", paintCover);
+    // A revealed card stays revealed; only an unrevealed cover is redrawn to fit
+    const onResize = () => {
+      if (!revealedRef.current) paintCover();
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [paintCover]);
+
+  const coverAgain = () => {
+    revealedRef.current = false;
+    setRevealed(false);
+    setBurst(0);
+    paintCover();
+    window.dispatchEvent(new Event(CARD_COVERED_EVENT));
+  };
 
   const erase = useCallback(
     (clientX: number, clientY: number) => {
@@ -151,9 +171,38 @@ function ScratchIntro() {
     [ready],
   );
 
+  // Once most of the cover is gone, fade the rest and celebrate
+  const checkReveal = () => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d", { willReadFrequently: true });
+    if (revealedRef.current || !canvas || !context) return;
+    const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+    let cleared = 0;
+    let sampled = 0;
+    for (let alpha = 3; alpha < data.length; alpha += 4 * 37) {
+      sampled++;
+      if (data[alpha] === 0) cleared++;
+    }
+    if (cleared / sampled > 0.55) {
+      revealedRef.current = true;
+      setRevealed(true);
+      setBurst((value) => value + 1);
+      window.dispatchEvent(new Event(CARD_REVEALED_EVENT));
+    }
+  };
+
   const pointFromEvent = (event: React.PointerEvent<HTMLCanvasElement>) => {
-    setCursor({ x: event.clientX, y: event.clientY, visible: true });
+    // Fingers don't need a coin drawn under them
+    if (event.pointerType !== "touch") setCursor({ x: event.clientX, y: event.clientY, visible: true });
     if (scratching.current) erase(event.clientX, event.clientY);
+  };
+
+  // Shared by pointerup and pointercancel, so an interrupted scratch still ends cleanly
+  const endScratch = () => {
+    if (!scratching.current) return;
+    scratching.current = false;
+    lastPoint.current = null;
+    checkReveal();
   };
 
   return (
@@ -162,9 +211,6 @@ function ScratchIntro() {
         ONE PART COMMUNITY
         <br />
         ONE PART CODE
-      </div>
-      <div className="absolute -right-2 -bottom-5 z-20 rotate-[4deg] border border-black bg-white px-3 py-2 font-mono text-[10px] font-bold text-black shadow-[3px_3px_0_#139f58] sm:-right-7">
-        EST. HYDERABAD
       </div>
       <div className="border border-[#139f58] bg-[#139f58] p-2 shadow-[10px_10px_0_#0b0b0b]">
         <div className="flex items-center justify-between border-b border-black/30 px-3 py-2 font-mono text-[10px] font-bold text-black">
@@ -194,7 +240,9 @@ function ScratchIntro() {
           </div>
           <canvas
             ref={canvasRef}
-            className="absolute inset-0 z-10 size-full touch-none cursor-none"
+            className={`absolute inset-0 z-10 size-full touch-none cursor-none transition-opacity duration-700 ${
+              revealed ? "pointer-events-none opacity-0" : ""
+            }`}
             aria-label="Scratch to reveal Karuna's introduction"
             onPointerDown={(event) => {
               scratching.current = true;
@@ -203,25 +251,52 @@ function ScratchIntro() {
               erase(event.clientX, event.clientY);
             }}
             onPointerMove={pointFromEvent}
-            onPointerUp={() => {
-              scratching.current = false;
-              lastPoint.current = null;
+            onPointerUp={endScratch}
+            onPointerCancel={endScratch}
+            onPointerEnter={(event) => {
+              if (event.pointerType !== "touch") setCursor({ x: event.clientX, y: event.clientY, visible: true });
             }}
-            onPointerEnter={(event) => setCursor({ x: event.clientX, y: event.clientY, visible: true })}
             onPointerLeave={() => setCursor((value) => ({ ...value, visible: false }))}
           />
         </div>
       </div>
+      {burst > 0 && !reducedMotion && (
+        <div key={burst} aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 z-30">
+          {Array.from({ length: 20 }, (_, index) => {
+            const angle = (index / 20) * Math.PI * 2;
+            const distance = 140 + (index % 3) * 70;
+            return (
+              <motion.span
+                key={index}
+                className="absolute -translate-x-1/2 -translate-y-1/2 text-2xl"
+                style={{ color: ["#f4ed45", "#139f58", "#111"][index % 3] }}
+                initial={{ x: 0, y: 0, scale: 0, opacity: 1, rotate: 0 }}
+                animate={{
+                  x: Math.cos(angle) * distance,
+                  y: Math.sin(angle) * distance,
+                  scale: [0, 1.5, 0.6],
+                  opacity: [1, 1, 0],
+                  rotate: 220,
+                }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+              >
+                ✦
+              </motion.span>
+            );
+          })}
+        </div>
+      )}
       <button
         type="button"
-        onClick={paintCover}
+        data-cursor="reset"
+        onClick={coverAgain}
         className="mt-5 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-white/60 transition-colors hover:text-[#f4ed45]"
       >
         <RefreshCw className="size-3.5" /> Cover it up again
       </button>
       {cursor.visible && (
         <div
-          className="pointer-events-none fixed left-0 top-0 z-50 hidden size-[88px] -translate-x-1/2 -translate-y-1/2 md:block"
+          className="pointer-events-none fixed left-0 top-0 z-50 size-[88px] -translate-x-1/2 -translate-y-1/2"
           style={{ transform: `translate3d(${cursor.x - 44}px, ${cursor.y - 44}px, 0)` }}
         >
           <CoinCursor />
@@ -243,11 +318,13 @@ export default function App() {
           </a>
           <div className="hidden items-center gap-8 font-mono text-[11px] uppercase tracking-widest text-white/60 sm:flex">
             <a className="transition-colors hover:text-white" href="#work">Work</a>
+            <a className="transition-colors hover:text-white" href="#art">Art</a>
             <a className="transition-colors hover:text-white" href="#about">About</a>
             <a className="transition-colors hover:text-white" href="#speaking">Speaking</a>
           </div>
           <a
             href="mailto:karunatata63@gmail.com"
+            data-cursor="hi!"
             className="group flex items-center gap-2 bg-[#139f58] px-4 py-2 font-mono text-[11px] font-bold uppercase text-black transition-colors hover:bg-[#f4ed45]"
           >
             Say hello <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -328,35 +405,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="bg-[#139f58] text-black">
-        <div className="mx-auto max-w-[1440px] px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-            <div>
-              <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.22em]">02 / Community impact</p>
-              <h2 className="font-display text-5xl leading-[0.95] tracking-tight sm:text-7xl">People first.<br />Numbers included.</h2>
-              <p className="mt-7 max-w-md text-base leading-7 text-black/65">
-                Programs are only useful when people return, learn, contribute, and get unstuck. These are a few outcomes I am proud of.
-              </p>
-            </div>
-            <div className="grid gap-px border border-black/25 bg-black/25 sm:grid-cols-2">
-              {[
-                ["900+", "Customer conversations", "Owned resolution across Intercom, Discord, and email—escalating to Engineering only when it was genuinely needed."],
-                ["3,533+", "Community members", "Created a tiered points system that gave passive members a clear path from active participant to community Champion."],
-                ["436", "Course learners", "Released two self-serve courses with a 4.04/5 rating, alongside 14 customer training sessions rated 4.5/5."],
-                ["100+", "Hackathon participants", "Hosted student hackathons that brought in eight new regular contributors, plus a GenAI series for 30+ educators."],
-              ].map(([number, title, detail]) => (
-                <article key={title} className="min-h-64 bg-[#139f58] p-7 transition-colors hover:bg-[#f4ed45]">
-                  <div className="flex items-center justify-between font-mono text-[11px] font-bold">
-                    <span>{number}</span><Check className="size-4" />
-                  </div>
-                  <h3 className="mt-12 font-display text-3xl leading-none">{title}</h3>
-                  <p className="mt-5 text-sm leading-6 text-black/65">{detail}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <ArtGallery />
 
       <section id="about" className="mx-auto grid max-w-[1440px] gap-14 px-5 py-28 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-40">
         <div>
@@ -428,6 +477,7 @@ export default function App() {
                   </div>
                   <a
                     href={video.url}
+                    data-cursor="watch"
                     target="_blank"
                     rel="noreferrer"
                     aria-label={`Watch ${video.title} on YouTube`}
@@ -445,20 +495,23 @@ export default function App() {
       <footer className="bg-[#f4f1e8] text-black">
         <div className="mx-auto max-w-[1440px] px-5 pb-8 pt-24 sm:px-8 lg:px-12 lg:pt-32">
           <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-black/45">Building for developers—or a community around them?</p>
-          <a href="mailto:karunatata63@gmail.com" className="group mt-6 flex items-end justify-between border-b-2 border-black pb-4">
+          <a href="mailto:karunatata63@gmail.com" data-cursor="email" className="group mt-6 flex items-end justify-between border-b-2 border-black pb-4">
             <span className="font-display text-[clamp(3.3rem,10vw,9rem)] leading-[0.8] tracking-[-0.055em]">Let&apos;s make it.</span>
             <ArrowUpRight className="mb-1 size-10 transition-transform group-hover:-translate-y-2 group-hover:translate-x-2 sm:size-20" strokeWidth={1.2} />
           </a>
           <div className="mt-10 flex flex-col gap-6 font-mono text-[11px] font-bold uppercase tracking-wider sm:flex-row sm:items-center sm:justify-between">
             <span>© {new Date().getFullYear()} Karuna Tata · Built with curiosity</span>
-            <div className="flex gap-5">
+            <div className="flex flex-wrap gap-x-5 gap-y-3">
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="mailto:karunatata63@gmail.com"><Mail className="size-4" /> Email</a>
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="https://www.linkedin.com/in/starlightknown/" target="_blank" rel="noreferrer"><Linkedin className="size-4" /> LinkedIn</a>
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="https://github.com/starlightknown" target="_blank" rel="noreferrer"><Github className="size-4" /> GitHub</a>
+              <a className="flex items-center gap-2 hover:text-[#139f58]" href="https://www.instagram.com/orbitingstart/" target="_blank" rel="noreferrer"><Instagram className="size-4" /> Instagram</a>
             </div>
           </div>
         </div>
       </footer>
+      <StarBuddy />
+      <SiteCursor />
     </main>
   );
 }
