@@ -206,8 +206,9 @@ function ScratchIntro() {
   };
 
   const pointFromEvent = (event: React.PointerEvent<HTMLCanvasElement>) => {
-    // Fingers don't need a coin drawn under them
-    if (event.pointerType !== "touch") setCursor({ x: event.clientX, y: event.clientY, visible: true });
+    // A mouse shows the coin whenever it hovers; a finger only while it scratches.
+    // The coin sits up and left of the point, so a thumb doesn't hide it.
+    if (event.pointerType !== "touch" || scratching.current) setCursor({ x: event.clientX, y: event.clientY, visible: true });
     if (!scratching.current) return;
     erase(event.clientX, event.clientY);
     // A faint tick under the finger, on phones that support it
@@ -218,7 +219,8 @@ function ScratchIntro() {
   };
 
   // Shared by pointerup and pointercancel, so an interrupted scratch still ends cleanly
-  const endScratch = () => {
+  const endScratch = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (event.pointerType === "touch") setCursor((value) => ({ ...value, visible: false }));
     if (!scratching.current) return;
     scratching.current = false;
     lastPoint.current = null;
@@ -272,6 +274,7 @@ function ScratchIntro() {
               scratching.current = true;
               lastPoint.current = null;
               event.currentTarget.setPointerCapture(event.pointerId);
+              setCursor({ x: event.clientX, y: event.clientY, visible: true });
               erase(event.clientX, event.clientY);
             }}
             onPointerMove={pointFromEvent}

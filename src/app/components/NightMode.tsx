@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 
 // Easter egg: "night mode" swaps in the Night studio palette (palette.css).
-// Triggers: the Konami code, typing "night", or tapping the star buddy five
-// times fast (it dispatches NIGHT_TOGGLE_EVENT). The choice is remembered.
+// Triggers: typing "night", or tapping the star buddy five times fast (it
+// dispatches NIGHT_TOGGLE_EVENT). The choice is remembered.
 
 export const NIGHT_TOGGLE_EVENT = "night-mode-toggle";
 export const NIGHT_CHANGED_EVENT = "night-mode-changed";
 
 const STORAGE_KEY = "night-mode";
-const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
 const WORD = "night";
 
 const isNight = () => document.documentElement.dataset.mode === "night";
@@ -44,7 +43,7 @@ export function useNightMode() {
   return night;
 }
 
-// Listens for the secret codes; renders nothing
+// Listens for the secret word; renders nothing
 export function NightModeKeys() {
   useEffect(() => {
     try {
@@ -53,20 +52,15 @@ export function NightModeKeys() {
       // No stored preference available
     }
 
-    const keys: string[] = [];
     let typed = "";
     const onKey = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       const target = event.target as HTMLElement | null;
       if (target?.closest("input, textarea, select, [contenteditable]")) return;
 
-      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
-      keys.push(key);
-      if (keys.length > KONAMI.length) keys.shift();
-      typed = (typed + (key.length === 1 ? key : " ")).slice(-WORD.length);
+      typed = (typed + (event.key.length === 1 ? event.key.toLowerCase() : " ")).slice(-WORD.length);
 
-      if (keys.join() === KONAMI.join() || typed === WORD) {
-        keys.length = 0;
+      if (typed === WORD) {
         typed = "";
         setNight(!isNight());
       }
