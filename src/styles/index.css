@@ -9,8 +9,10 @@
   to { transform: translateX(-50%); }
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -55,7 +57,7 @@ html.has-site-cursor * {
 .site-cursor-label {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #111;
@@ -125,4 +127,15 @@ html.site-cursor-pressed .site-cursor-ring-shape {
   .star-buddy-eyes {
     animation: none;
   }
+}
+
+/* The lightbox is a native <dialog> in the top layer, above the custom
+   cursor, so it shows the system pointer instead */
+html.has-site-cursor dialog[open],
+html.has-site-cursor dialog[open] * {
+  cursor: auto !important;
+}
+
+html.has-site-cursor dialog[open] button {
+  cursor: pointer !important;
 }

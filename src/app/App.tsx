@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { MotionConfig, motion, useReducedMotion } from "motion/react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -10,6 +10,8 @@ import {
   Mail,
   MapPin,
   Mic2,
+  Pause,
+  Play,
   RefreshCw,
   Sparkles,
 } from "lucide-react";
@@ -21,7 +23,7 @@ import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT } from "./components/pointer";
 
 const experience = [
   {
-    period: "DEC 2025—NOW",
+    period: "Dec 2025–now",
     role: "Community & Support Associate",
     company: "Zencoder",
     note: "Community, support & automation",
@@ -29,7 +31,7 @@ const experience = [
       "Own end-to-end customer support across Intercom, Discord, and email; built a custom Discord support bot and launched a structured open-source contributor program.",
   },
   {
-    period: "MAR—NOV 2025",
+    period: "Mar–Nov 2025",
     role: "Product Advocate",
     company: "DevRev",
     note: "Education & community growth",
@@ -37,7 +39,7 @@ const experience = [
       "Built community programs, courses, workshops, hackathons, and self-serve spaces that turned learners and Discord members into active contributors.",
   },
   {
-    period: "2023—MAR 2025",
+    period: "2023–Mar 2025",
     role: "Frontend Engineer",
     company: "DevRev",
     note: "Product engineering",
@@ -138,6 +140,14 @@ function ScratchIntro() {
     return () => window.removeEventListener("resize", onResize);
   }, [paintCover]);
 
+  const reveal = () => {
+    if (revealedRef.current) return;
+    revealedRef.current = true;
+    setRevealed(true);
+    setBurst((value) => value + 1);
+    window.dispatchEvent(new Event(CARD_REVEALED_EVENT));
+  };
+
   const coverAgain = () => {
     revealedRef.current = false;
     setRevealed(false);
@@ -183,12 +193,7 @@ function ScratchIntro() {
       sampled++;
       if (data[alpha] === 0) cleared++;
     }
-    if (cleared / sampled > 0.55) {
-      revealedRef.current = true;
-      setRevealed(true);
-      setBurst((value) => value + 1);
-      window.dispatchEvent(new Event(CARD_REVEALED_EVENT));
-    }
+    if (cleared / sampled > 0.55) reveal();
   };
 
   const pointFromEvent = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -207,21 +212,25 @@ function ScratchIntro() {
 
   return (
     <div className="relative">
-      <div className="absolute -left-3 -top-4 z-20 rotate-[-6deg] bg-[#f4ed45] px-3 py-2 font-mono text-[10px] font-bold text-black shadow-[3px_3px_0_#111] sm:-left-8">
+      <div className="absolute -left-3 -top-4 z-20 rotate-[-6deg] bg-[#f4ed45] px-3 py-2 font-mono text-[10px] font-medium text-black shadow-[3px_3px_0_#111] sm:-left-8">
         ONE PART COMMUNITY
         <br />
         ONE PART CODE
       </div>
       <div className="border border-[#139f58] bg-[#139f58] p-2 shadow-[10px_10px_0_#0b0b0b]">
-        <div className="flex items-center justify-between border-b border-black/30 px-3 py-2 font-mono text-[10px] font-bold text-black">
+        <div className="flex items-center justify-between border-b border-black/30 px-3 py-2 font-mono text-[10px] font-medium text-black">
           <span>PORTFOLIO_ID: KT-63</span>
           <span className="flex items-center gap-1.5">
-            <span className="size-2 animate-pulse rounded-full bg-[#f4ed45]" />
+            <span className="size-2 rounded-full bg-[#f4ed45] motion-safe:animate-pulse" />
             AVAILABLE FOR GOOD TROUBLE
           </span>
         </div>
         <div ref={cardRef} className="relative aspect-[4/5] sm:aspect-[4/3] sm:min-h-[330px] overflow-hidden bg-[#f4f1e8]">
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-7 text-center text-black">
+          {/* Tabbing into the card reveals it, so keyboard focus never sits under the cover */}
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center px-7 text-center text-black"
+            onFocus={reveal}
+          >
             <span className="mb-5 inline-flex size-12 items-center justify-center rounded-full bg-[#139f58]">
               <Sparkles className="size-5" />
             </span>
@@ -233,7 +242,7 @@ function ScratchIntro() {
             </p>
             <a
               href="#work"
-              className="mt-6 inline-flex items-center gap-2 border-b-2 border-black pb-1 font-mono text-xs font-bold uppercase"
+              className="mt-6 inline-flex items-center gap-2 border-b-2 border-black pb-1 font-mono text-xs font-medium uppercase"
             >
               See the community work <ArrowDown className="size-4" />
             </a>
@@ -243,7 +252,7 @@ function ScratchIntro() {
             className={`absolute inset-0 z-10 size-full touch-none cursor-none transition-opacity duration-700 ${
               revealed ? "pointer-events-none opacity-0" : ""
             }`}
-            aria-label="Scratch to reveal Karuna's introduction"
+            aria-hidden="true"
             onPointerDown={(event) => {
               scratching.current = true;
               lastPoint.current = null;
@@ -288,11 +297,19 @@ function ScratchIntro() {
       )}
       <button
         type="button"
-        data-cursor="reset"
-        onClick={coverAgain}
-        className="mt-5 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-white/60 transition-colors hover:text-[#f4ed45]"
+        data-cursor={revealed ? "reset" : "reveal"}
+        onClick={revealed ? coverAgain : reveal}
+        className="mt-5 flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-wider text-white/60 transition-colors hover:text-[#f4ed45]"
       >
-        <RefreshCw className="size-3.5" /> Cover it up again
+        {revealed ? (
+          <>
+            <RefreshCw className="size-3.5" /> Cover it up again
+          </>
+        ) : (
+          <>
+            <Sparkles className="size-3.5" /> Reveal without scratching
+          </>
+        )}
       </button>
       {cursor.visible && (
         <div
@@ -308,13 +325,21 @@ function ScratchIntro() {
 
 export default function App() {
   const [activeSkills, setActiveSkills] = useState<keyof typeof skillGroups>("Community");
+  const [tickerPaused, setTickerPaused] = useState(false);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-background font-body text-foreground selection:bg-[#f4ed45] selection:text-black">
+    <MotionConfig reducedMotion="user">
+    <div className="min-h-screen overflow-hidden bg-background font-body text-foreground selection:bg-[#f4ed45] selection:text-black">
+      <a
+        href="#content"
+        className="sr-only z-50 bg-[#f4ed45] px-4 py-2 font-mono text-xs font-medium uppercase text-black focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        Skip to content
+      </a>
       <header className="sticky top-0 z-40 border-b border-white/15 bg-[#1e1e1e]/90 backdrop-blur-lg">
         <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
-          <a href="#top" className="font-display text-xl tracking-tight">
-            KARUNA TATA<span className="text-[#139f58]">.</span>
+          <a href="#top" className="font-display text-xl uppercase tracking-tight">
+            Karuna Tata<span className="text-[#139f58]">.</span>
           </a>
           <div className="hidden items-center gap-8 font-mono text-[11px] uppercase tracking-widest text-white/60 sm:flex">
             <a className="transition-colors hover:text-white" href="#work">Work</a>
@@ -325,12 +350,14 @@ export default function App() {
           <a
             href="mailto:karunatata63@gmail.com"
             data-cursor="hi!"
-            className="group flex items-center gap-2 bg-[#139f58] px-4 py-2 font-mono text-[11px] font-bold uppercase text-black transition-colors hover:bg-[#f4ed45]"
+            className="group flex items-center gap-2 bg-[#139f58] px-4 py-2 font-mono text-[11px] font-medium uppercase text-black transition-colors hover:bg-[#f4ed45]"
           >
-            Say hello <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            Say hello <ArrowUpRight className="size-4 transition-transform motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5" />
           </a>
         </nav>
       </header>
+
+      <main id="content" tabIndex={-1} className="focus:outline-none">
 
       <section id="top" className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-14 px-5 pb-24 pt-16 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20 lg:px-12 lg:pb-32 lg:pt-24">
         <div className="relative z-10">
@@ -349,10 +376,10 @@ export default function App() {
             I build communities where developers get unblocked, become contributors, and feel like they belong in the room.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <a href="#work" className="inline-flex items-center gap-2 bg-white px-5 py-3 font-mono text-xs font-bold uppercase text-black transition-transform hover:-translate-y-1">
+            <a href="#work" className="inline-flex items-center gap-2 bg-white px-5 py-3 font-mono text-xs font-medium uppercase text-black transition-transform motion-safe:hover:-translate-y-1">
               Explore the work <ArrowDown className="size-4" />
             </a>
-            <a href="https://github.com/starlightknown" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/25 px-5 py-3 font-mono text-xs font-bold uppercase transition-colors hover:border-[#139f58] hover:text-[#139f58]">
+            <a href="https://github.com/starlightknown" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/25 px-5 py-3 font-mono text-xs font-medium uppercase transition-colors hover:border-[#139f58] hover:text-[#139f58]">
               <Github className="size-4" /> GitHub
             </a>
           </div>
@@ -361,16 +388,28 @@ export default function App() {
         <Asterisk className="absolute -left-10 top-10 size-40 text-white/[0.025]" strokeWidth={1} />
       </section>
 
-      <div className="rotate-[-1deg] scale-[1.02] overflow-hidden border-y border-black bg-[#f4ed45] py-3 text-black">
-        <div className="flex w-max animate-[marquee_24s_linear_infinite] gap-6 font-mono text-xs font-bold uppercase tracking-widest">
+      <div className="relative rotate-[-1deg] scale-[1.02] overflow-hidden border-y border-black bg-[#f4ed45] py-3 text-black">
+        <div
+          className="flex w-max gap-6 font-mono text-xs font-medium uppercase tracking-widest motion-safe:animate-[marquee_24s_linear_infinite]"
+          style={{ animationPlayState: tickerPaused ? "paused" : "running" }}
+        >
           {[...Array(2)].flatMap((_, index) =>
-            ["DEVELOPER RELATIONS", "COMMUNITY BUILDING", "OPEN SOURCE", "CUSTOMER ADVOCACY", "TECHNICAL EDUCATION", "PRODUCT FEEDBACK"].map((item) => (
-              <span className="flex items-center gap-6" key={`${item}-${index}`}>
+            ["Developer relations", "Community building", "Open source", "Customer advocacy", "Technical education", "Product feedback"].map((item) => (
+              <span className="flex items-center gap-6" key={`${item}-${index}`} aria-hidden={index > 0 || undefined}>
                 {item} <Asterisk className="size-4" />
               </span>
             )),
           )}
         </div>
+        <button
+          type="button"
+          onClick={() => setTickerPaused((value) => !value)}
+          data-cursor={tickerPaused ? "play" : "pause"}
+          aria-label={tickerPaused ? "Play ticker" : "Pause ticker"}
+          className="absolute left-3 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center bg-black text-[#f4ed45] motion-reduce:hidden sm:left-6"
+        >
+          {tickerPaused ? <Play className="size-3.5" /> : <Pause className="size-3.5" />}
+        </button>
       </div>
 
       <section id="work" className="mx-auto max-w-[1440px] px-5 py-28 sm:px-8 lg:px-12 lg:py-40">
@@ -394,10 +433,10 @@ export default function App() {
               transition={{ delay: index * 0.08 }}
               className="group grid gap-5 border-b border-white/20 py-8 transition-colors hover:bg-white/[0.025] sm:grid-cols-[130px_1fr] lg:grid-cols-[150px_1.1fr_1fr] lg:gap-10 lg:py-10"
             >
-              <div className="font-mono text-[11px] font-bold tracking-wider text-[#139f58]">{item.period}</div>
+              <div className="font-mono text-[11px] font-medium uppercase tracking-wider text-[#139f58]">{item.period}</div>
               <div>
                 <h3 className="font-display text-3xl leading-tight sm:text-4xl">{item.role}</h3>
-                <p className="mt-2 font-mono text-xs uppercase tracking-wider text-white/45">{item.company} · {item.note}</p>
+                <p className="mt-2 font-mono text-xs uppercase tracking-wider text-white/50">{item.company} · {item.note}</p>
               </div>
               <p className="text-sm leading-7 text-white/55 lg:pt-1">{item.detail}</p>
             </motion.article>
@@ -410,7 +449,7 @@ export default function App() {
       <section id="about" className="mx-auto grid max-w-[1440px] gap-14 px-5 py-28 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-40">
         <div>
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.22em] text-[#139f58]">03 / Toolbox</p>
-          <h2 className="font-display text-5xl leading-none tracking-tight sm:text-7xl">Community craft.<br /><span className="text-white/30">Technical depth.</span></h2>
+          <h2 className="font-display text-5xl leading-none tracking-tight sm:text-7xl">Community craft.<br /><span className="text-white/40">Technical depth.</span></h2>
         </div>
         <div>
           <div className="mb-7 flex flex-wrap gap-2">
@@ -418,8 +457,9 @@ export default function App() {
               <button
                 type="button"
                 key={group}
+                aria-pressed={activeSkills === group}
                 onClick={() => setActiveSkills(group)}
-                className={`border px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                className={`border px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-wider transition-colors ${
                   activeSkills === group ? "border-[#f4ed45] bg-[#f4ed45] text-black" : "border-white/20 text-white/55 hover:border-white/60 hover:text-white"
                 }`}
               >
@@ -429,15 +469,13 @@ export default function App() {
           </div>
           <div className="flex min-h-60 flex-wrap content-start gap-3 border-t border-white/20 pt-7">
             {skillGroups[activeSkills].map((skill, index) => (
-              <motion.span
+              <span
                 key={`${activeSkills}-${skill}`}
-                initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
-                animate={{ opacity: 1, scale: 1, rotate: index % 3 === 0 ? -1 : index % 3 === 1 ? 1 : 0 }}
-                transition={{ delay: index * 0.04 }}
+                style={{ rotate: `${index % 3 === 0 ? -1 : index % 3 === 1 ? 1 : 0}deg` }}
                 className="h-fit border border-white/20 bg-white/[0.04] px-5 py-3 font-display text-2xl transition-colors hover:border-[#139f58] hover:bg-[#139f58] hover:text-black"
               >
                 {skill}
-              </motion.span>
+              </span>
             ))}
           </div>
         </div>
@@ -468,7 +506,7 @@ export default function App() {
                 </div>
                 <div className="flex min-h-36 items-start justify-between gap-6 p-6">
                   <div>
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#139f58]">
+                    <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-[#139f58]">
                       0{index + 1} / {video.type}
                     </span>
                     <h3 className="mt-3 font-display text-2xl leading-tight transition-colors group-hover:text-[#f4ed45] sm:text-3xl">
@@ -491,15 +529,16 @@ export default function App() {
           </div>
         </div>
       </section>
+      </main>
 
       <footer className="bg-[#f4f1e8] text-black">
         <div className="mx-auto max-w-[1440px] px-5 pb-8 pt-24 sm:px-8 lg:px-12 lg:pt-32">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-black/45">Building for developers—or a community around them?</p>
+          <p className="font-mono text-xs font-medium uppercase tracking-[0.22em] text-black/60">Building for developers—or a community around them?</p>
           <a href="mailto:karunatata63@gmail.com" data-cursor="email" className="group mt-6 flex items-end justify-between border-b-2 border-black pb-4">
             <span className="font-display text-[clamp(3.3rem,10vw,9rem)] leading-[0.8] tracking-[-0.055em]">Let&apos;s make it.</span>
-            <ArrowUpRight className="mb-1 size-10 transition-transform group-hover:-translate-y-2 group-hover:translate-x-2 sm:size-20" strokeWidth={1.2} />
+            <ArrowUpRight className="mb-1 size-10 transition-transform motion-safe:group-hover:-translate-y-2 motion-safe:group-hover:translate-x-2 sm:size-20" strokeWidth={1.2} />
           </a>
-          <div className="mt-10 flex flex-col gap-6 font-mono text-[11px] font-bold uppercase tracking-wider sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-10 flex flex-col gap-6 font-mono text-[11px] font-medium uppercase tracking-wider sm:flex-row sm:items-center sm:justify-between">
             <span>© {new Date().getFullYear()} Karuna Tata · Built with curiosity</span>
             <div className="flex flex-wrap gap-x-5 gap-y-3">
               <a className="flex items-center gap-2 hover:text-[#139f58]" href="mailto:karunatata63@gmail.com"><Mail className="size-4" /> Email</a>
@@ -512,6 +551,7 @@ export default function App() {
       </footer>
       <StarBuddy />
       <SiteCursor />
-    </main>
+    </div>
+    </MotionConfig>
   );
 }
