@@ -2,8 +2,8 @@
 
 :root {
   --font-size: 16px;
-  --background: #1e1e1e;
-  --foreground: #f4f1e8;
+  --background: var(--page);
+  --foreground: var(--ink);
   --card: #272727;
   --card-foreground: #f4f1e8;
   --popover: #272727;
@@ -42,8 +42,8 @@
 }
 
 .dark {
-  --background: #1e1e1e;
-  --foreground: #f4f1e8;
+  --background: var(--page);
+  --foreground: var(--ink);
   --card: #272727;
   --card-foreground: #f4f1e8;
   --popover: #272727;
