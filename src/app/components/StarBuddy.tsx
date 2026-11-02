@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT, isEnteringIframe } from "./pointer";
+import { NIGHT_CHANGED_EVENT, NIGHT_TOGGLE_EVENT } from "./NightMode";
 
 const LINES = [
   "psst… scratch the card up top ✦",
@@ -11,6 +12,8 @@ const LINES = [
   "Support tickets are just feature requests in disguise.",
   "Ship it! (after the docs, please)",
   "Go look at the donut. Trust me. 🍩",
+  "I know a secret: ↑ ↑ ↓ ↓ ← → ← → B A",
+  "On a phone? Tap me five times, fast. 🌙",
 ];
 
 const REVEAL_LINE = "You found the human! ✦✦✦";
@@ -27,6 +30,7 @@ export default function StarBuddy() {
   const nextLine = useRef(1);
   const hideTimer = useRef<number | undefined>(undefined);
   const greetTimer = useRef<number | undefined>(undefined);
+  const taps = useRef<number[]>([]);
 
   const say = (text: string, duration = 4500) => {
     // Anything said before the greeting fires takes its place
@@ -43,6 +47,11 @@ export default function StarBuddy() {
       say(REVEAL_LINE);
     };
     const onCovered = () => setLine((current) => (current === REVEAL_LINE ? null : current));
+    const onNight = (event: Event) => {
+      const { night } = (event as CustomEvent<{ night: boolean }>).detail;
+      setSpins((value) => value + 1);
+      say(night ? "Lights off. Welcome to the studio after hours ✦" : "Good morning! Lights back on ☀︎");
+    };
 
     // Eyes are moved through refs, at most once per frame, to avoid a React
     // render on every pointer event
@@ -76,6 +85,7 @@ export default function StarBuddy() {
 
     window.addEventListener(CARD_REVEALED_EVENT, onReveal);
     window.addEventListener(CARD_COVERED_EVENT, onCovered);
+    window.addEventListener(NIGHT_CHANGED_EVENT, onNight);
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerout", onOut);
     return () => {
@@ -84,12 +94,20 @@ export default function StarBuddy() {
       window.clearTimeout(hideTimer.current);
       window.removeEventListener(CARD_REVEALED_EVENT, onReveal);
       window.removeEventListener(CARD_COVERED_EVENT, onCovered);
+      window.removeEventListener(NIGHT_CHANGED_EVENT, onNight);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerout", onOut);
     };
   }, []);
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    // Five taps within 1.6s toggles night mode, the touch-friendly secret
+    taps.current = [...taps.current, event.timeStamp].filter((time) => event.timeStamp - time < 1600);
+    if (taps.current.length >= 5) {
+      taps.current = [];
+      window.dispatchEvent(new Event(NIGHT_TOGGLE_EVENT));
+      return;
+    }
     setSpins((value) => value + 1);
     say(LINES[nextLine.current]);
     nextLine.current = (nextLine.current + 1) % LINES.length;

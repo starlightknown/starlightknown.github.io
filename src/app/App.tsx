@@ -19,9 +19,8 @@ import CoinCursor from "./imports/CoinCursor-2030-54";
 import ArtGallery from "./components/ArtGallery";
 import SiteCursor from "./components/SiteCursor";
 import StarBuddy from "./components/StarBuddy";
+import { NightModeKeys, NightSky } from "./components/NightMode";
 import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT } from "./components/pointer";
-import VariantPicker, { useVariantParam } from "./variants/VariantPicker";
-import "./variants/picker.css";
 
 const experience = [
   {
@@ -342,11 +341,10 @@ function ScratchIntro() {
 export default function App() {
   const [activeSkills, setActiveSkills] = useState<keyof typeof skillGroups>("Community");
   const [tickerPaused, setTickerPaused] = useState(false);
-  const reviewingVariants = useVariantParam();
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="min-h-screen overflow-hidden bg-background font-body text-foreground selection:bg-highlight selection:text-on-highlight">
+    <div className="min-h-screen overflow-x-clip bg-background font-body text-foreground selection:bg-highlight selection:text-on-highlight">
       <a
         href="#content"
         className="sr-only z-50 bg-highlight px-4 py-2 font-mono text-xs font-medium uppercase text-on-highlight focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
@@ -377,6 +375,7 @@ export default function App() {
       <main id="content" tabIndex={-1} className="focus:outline-none">
 
       <section id="top" className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-14 px-5 pb-24 pt-16 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20 lg:px-12 lg:pb-32 lg:pt-24">
+        <NightSky />
         <div className="relative z-10">
           <div className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">
             <MapPin className="size-4 text-accent" /> Bangalore, India
@@ -510,7 +509,7 @@ export default function App() {
           <div className="grid gap-px border border-ink/15 bg-ink/15 md:grid-cols-2">
             {talks.map((video, index) => (
               <article key={video.title} className="group bg-surface">
-                <div className="relative aspect-video overflow-hidden bg-black">
+                <div className="relative aspect-video overflow-hidden bg-ink">
                   <iframe
                     className="absolute inset-0 size-full"
                     src={video.embed}
@@ -568,7 +567,7 @@ export default function App() {
       </footer>
       <StarBuddy />
       <SiteCursor />
-      {reviewingVariants && <VariantPicker />}
+      <NightModeKeys />
     </div>
     </MotionConfig>
   );

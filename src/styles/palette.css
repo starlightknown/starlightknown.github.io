@@ -16,22 +16,23 @@
  * cannot pass contrast on both light and dark palettes.
  */
 :root {
-  --page: #1e1e1e;
-  --surface: #171717;
-  --ink: #f4f1e8;
-  --ink-muted: #9d9b95;
-  --ink-subtle: #74736e;
-  --accent: #139f58;
-  --on-accent: #000000;
-  --highlight: #f4ed45;
-  --on-highlight: #000000;
-  --paper: #f4f1e8;
-  --on-paper: #000000;
-  --on-paper-muted: #6b6a66;
-  --feature: #139f58;
-  --on-feature: #000000;
-  --on-feature-muted: #042514;
-  --shade: #111111;
+  color-scheme: light;
+  --page: #f2ede4;
+  --surface: #e9e2d5;
+  --ink: #1d1b17;
+  --ink-muted: #5b5852;
+  --ink-subtle: #837f78;
+  --accent: #a8401d;
+  --on-accent: #fbf8f2;
+  --highlight: #e3c26b;
+  --on-highlight: #1d1b17;
+  --paper: #fbf8f2;
+  --on-paper: #1d1b17;
+  --on-paper-muted: #66645f;
+  --feature: #e9e2d5;
+  --on-feature: #1d1b17;
+  --on-feature-muted: #5e5b55;
+  --shade: #1d1b17;
 }
 
 @theme inline {
@@ -53,27 +54,9 @@
   --color-shade: var(--shade);
 }
 
-/* Palette directions under review (?__variant=…). Remove the ones not chosen. */
-html[data-variant="paper"] {
-  --page: #f2ede4;
-  --surface: #e9e2d5;
-  --ink: #1d1b17;
-  --ink-muted: #5b5852;
-  --ink-subtle: #837f78;
-  --accent: #a8401d;
-  --on-accent: #fbf8f2;
-  --highlight: #e3c26b;
-  --on-highlight: #1d1b17;
-  --paper: #fbf8f2;
-  --on-paper: #1d1b17;
-  --on-paper-muted: #66645f;
-  --feature: #e9e2d5;
-  --on-feature: #1d1b17;
-  --on-feature-muted: #5e5b55;
-  --shade: #1d1b17;
-}
-
-html[data-variant="night"] {
+/* Night mode, an easter egg (see NightMode.tsx): the Night studio palette */
+html[data-mode="night"] {
+  color-scheme: dark;
   --page: #12131c;
   --surface: #0d0e15;
   --ink: #efe8da;
@@ -92,21 +75,9 @@ html[data-variant="night"] {
   --shade: #05060a;
 }
 
-html[data-variant="ember"] {
-  --page: #1b1512;
-  --surface: #140f0c;
-  --ink: #f3e8d7;
-  --ink-muted: #958c81;
-  --ink-subtle: #746c63;
-  --accent: #ea6a42;
-  --on-accent: #1b1512;
-  --highlight: #f2b544;
-  --on-highlight: #1b1512;
-  --paper: #f3e8d7;
-  --on-paper: #1b1512;
-  --on-paper-muted: #665f57;
-  --feature: #a63c1c;
-  --on-feature: #f3e8d7;
-  --on-feature-muted: #f1e2d1;
-  --shade: #0a0706;
+/* Swap palettes in one frame instead of letting every colour transition fire */
+html.switching-palette *,
+html.switching-palette *::before,
+html.switching-palette *::after {
+  transition: none !important;
 }

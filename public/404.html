@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found — Karuna Tata</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#f2ede4" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;500&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Gallery paper palette, kept in sync with src/styles/palette.css */
+      :root {
+        color-scheme: light;
+        --page: #f2ede4;
+        --ink: #1d1b17;
+        --ink-muted: #5b5852;
+        --accent: #a8401d;
+        --on-accent: #fbf8f2;
+        --highlight: #e3c26b;
+        --paper: #fbf8f2;
+        --shade: #1d1b17;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+        background: var(--page);
+        color: var(--ink);
+        font-family: "DM Sans", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      main {
+        width: 100%;
+        max-width: 560px;
+        text-align: center;
+      }
+
+      .card {
+        position: relative;
+        margin: 0 auto 40px;
+        max-width: 420px;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        padding: 12px;
+        box-shadow: 10px 10px 0 var(--shade);
+        rotate: -1.5deg;
+      }
+
+      .tape {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        width: 96px;
+        height: 24px;
+        translate: -50% 0;
+        rotate: -3deg;
+        background: var(--highlight);
+        opacity: 0.9;
+      }
+
+      .foil {
+        position: relative;
+        display: grid;
+        place-items: center;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background: var(--paper);
+      }
+
+      .code {
+        font: 700 clamp(5rem, 22vw, 8.5rem) / 1 "Playfair Display", Georgia, serif;
+        letter-spacing: -0.04em;
+      }
+
+      /* The silver cover, already scratched through the middle */
+      .foil::before,
+      .foil::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 34%;
+        background: #b7b7b2;
+      }
+
+      .foil::before {
+        top: 0;
+        clip-path: polygon(0 0, 100% 0, 100% 70%, 82% 100%, 60% 78%, 38% 96%, 18% 74%, 0 92%);
+      }
+
+      .foil::after {
+        bottom: 0;
+        clip-path: polygon(0 18%, 22% 0, 44% 22%, 66% 4%, 86% 26%, 100% 8%, 100% 100%, 0 100%);
+      }
+
+      .label {
+        margin: 0 0 12px;
+        font: 500 12px/1.4 "DM Mono", monospace;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1 {
+        margin: 0;
+        font: 700 clamp(2.25rem, 7vw, 3.25rem) / 1.05 "Playfair Display", Georgia, serif;
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+      }
+
+      p.lede {
+        margin: 16px auto 32px;
+        max-width: 42ch;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--ink-muted);
+        text-wrap: pretty;
+      }
+
+      .home {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: var(--accent);
+        color: var(--on-accent);
+        font: 500 12px/1 "DM Mono", monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+      }
+
+      @media (hover: hover) {
+        .home:hover {
+          background: var(--ink);
+          color: var(--paper);
+        }
+      }
+
+      .star {
+        display: block;
+        width: 56px;
+        height: 56px;
+        margin: 32px auto 0;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .star {
+          animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+          0%, 100% { translate: 0 0; rotate: -6deg; }
+          50% { translate: 0 -6px; rotate: 6deg; }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="card" aria-hidden="true">
+        <span class="tape"></span>
+        <div class="foil"><span class="code">404</span></div>
+      </div>
+      <p class="label">Page not found</p>
+      <h1>This page got scratched off.</h1>
+      <p class="lede">The link may be old, or the page never existed. Everything else, including the paintings, is still on the portfolio.</p>
+      <a class="home" href="/">Back to the portfolio <span aria-hidden="true">→</span></a>
+      <svg class="star" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M50 3 C55 34 66 45 97 50 C66 55 55 66 50 97 C45 66 34 55 3 50 C34 45 45 34 50 3 Z" fill="#e3c26b" stroke="#1d1b17" stroke-width="3" stroke-linejoin="round" />
+        <ellipse cx="43" cy="47" rx="3.2" ry="4.2" fill="#1d1b17" />
+        <ellipse cx="57" cy="47" rx="3.2" ry="4.2" fill="#1d1b17" />
+        <path d="M44 61 Q50 56 56 61" fill="none" stroke="#1d1b17" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </main>
+  </body>
+</html>

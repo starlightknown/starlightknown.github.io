@@ -10,6 +10,11 @@
   to { transform: translateX(-50%); }
 }
 
+/* Anchors and focused elements land below the sticky header */
+html {
+  scroll-padding-top: 5rem;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -139,4 +144,21 @@ html.has-site-cursor dialog[open] * {
 
 html.has-site-cursor dialog[open] button {
   cursor: pointer !important;
+}
+
+/* Night mode stars (see NightMode.tsx): static dots, twinkling only when
+   motion is welcome */
+.night-star {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .night-star {
+    animation: night-twinkle 4s ease-in-out infinite;
+  }
+}
+
+@keyframes night-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
 }
