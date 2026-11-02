@@ -1,0 +1,115 @@
+/* Review harness only: deliberately outside the design system (no project
+   tokens or fonts) so it never reads as part of what is being judged. */
+.variant-picker-shell {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 200;
+  font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #e5e5e5;
+  cursor: auto;
+}
+
+.variant-picker-shell * {
+  cursor: auto !important;
+}
+
+.variant-picker-shell button,
+.variant-picker-shell select {
+  cursor: pointer !important;
+}
+
+.variant-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 200px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+}
+
+.variant-picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.variant-picker-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px 2px;
+  color: #a1a1aa;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.variant-picker button {
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #d4d4d8;
+  text-align: start;
+  font: inherit;
+  transition: font-weight 150ms ease-out, background-color 150ms ease-out;
+}
+
+.variant-picker button:hover {
+  background: #27272a;
+}
+
+.variant-picker button[aria-pressed="true"] {
+  background: #3f3f46;
+  color: #fafafa;
+  font-weight: 600;
+}
+
+.variant-picker-hint {
+  margin: 0;
+  padding: 4px 8px 2px;
+  color: #a1a1aa;
+  font-size: 11px;
+}
+
+.variant-picker-select {
+  position: relative;
+  display: none;
+}
+
+.variant-picker-select select {
+  appearance: none;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  background: #18181b;
+  color: #fafafa;
+  font: inherit;
+  font-size: 16px;
+}
+
+.variant-picker-select svg {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  translate: 0 -50%;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .variant-picker {
+    display: none;
+  }
+
+  .variant-picker-select {
+    display: block;
+  }
+}

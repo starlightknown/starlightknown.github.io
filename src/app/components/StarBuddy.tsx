@@ -110,10 +110,10 @@ export default function StarBuddy() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 26 }}
-            className="relative mb-3 max-w-[220px] origin-bottom-right border-2 border-black bg-[#f4f1e8] px-3 py-2 font-mono text-[11px] font-medium leading-snug text-black shadow-[4px_4px_0_#139f58]"
+            className="relative mb-3 max-w-[220px] origin-bottom-right border-2 border-on-paper bg-paper px-3 py-2 font-mono text-[11px] font-medium leading-snug text-on-paper shadow-[4px_4px_0_var(--accent)]"
           >
             {line}
-            <span className="absolute -bottom-[9px] right-6 size-4 rotate-45 border-b-2 border-r-2 border-black bg-[#f4f1e8]" />
+            <span className="absolute -bottom-[9px] right-6 size-4 rotate-45 border-b-2 border-r-2 border-on-paper bg-paper" />
           </motion.p>
         )}
       </AnimatePresence>
@@ -135,7 +135,7 @@ export default function StarBuddy() {
         >
           <path
             d="M50 3 C55 34 66 45 97 50 C66 55 55 66 50 97 C45 66 34 55 3 50 C34 45 45 34 50 3 Z"
-            fill="#f4ed45"
+            fill="var(--highlight)"
             stroke="#111"
             strokeWidth="3"
             strokeLinejoin="round"

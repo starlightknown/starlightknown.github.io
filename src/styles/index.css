@@ -3,6 +3,7 @@
 @import 'tw-animate-css';
 @import './fonts.css';
 @import './theme.css';
+@import './palette.css';
 
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -30,7 +31,7 @@ html.has-site-cursor * {
   height: 8px;
   margin: -4px 0 0 -4px;
   border-radius: 999px;
-  background: #f4ed45;
+  background: var(--highlight);
   mix-blend-mode: difference;
 }
 
@@ -48,7 +49,7 @@ html.has-site-cursor * {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #139f58;
+  border: 1.5px solid var(--accent);
   border-radius: 999px;
   transition: width 0.25s ease, height 0.25s ease, left 0.25s ease, top 0.25s ease,
     background-color 0.25s ease, border-color 0.25s ease, opacity 0.2s ease, transform 0.15s ease;
@@ -60,7 +61,7 @@ html.has-site-cursor * {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #111;
+  color: var(--on-highlight);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -70,8 +71,8 @@ html[data-site-cursor="hover"] .site-cursor-ring-shape {
   top: -32px;
   width: 64px;
   height: 64px;
-  background: #f4ed45;
-  border-color: #111;
+  background: var(--highlight);
+  border-color: var(--on-highlight);
 }
 
 html[data-site-cursor="hover"] .site-cursor-label {

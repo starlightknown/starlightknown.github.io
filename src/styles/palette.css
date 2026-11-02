@@ -1,0 +1,112 @@
+/*
+ * Colour roles. Components use only these (bg-page, text-ink, bg-accent …),
+ * never raw hex values, so a palette can be swapped in one place.
+ *
+ *   page / surface      page background, recessed band (Speaking)
+ *   ink                 text and hairlines on page and surface
+ *   ink-muted           secondary text, measured ≥ 4.5:1 on page and surface
+ *   ink-subtle          large text only (≥ 24px), measured ≥ 3:1 on page
+ *   accent / on-accent  labels, primary button, card frame
+ *   highlight / on-…    ticker, tape, active tab, hover fills
+ *   paper / on-paper    cards, polaroids, footer (+ on-paper-muted)
+ *   feature / on-…      the art section's background (+ on-feature-muted)
+ *   shade               hard offset shadows
+ *
+ * Muted roles are explicit colours, not alpha, because one alpha level
+ * cannot pass contrast on both light and dark palettes.
+ */
+:root {
+  --page: #1e1e1e;
+  --surface: #171717;
+  --ink: #f4f1e8;
+  --ink-muted: #9d9b95;
+  --ink-subtle: #74736e;
+  --accent: #139f58;
+  --on-accent: #000000;
+  --highlight: #f4ed45;
+  --on-highlight: #000000;
+  --paper: #f4f1e8;
+  --on-paper: #000000;
+  --on-paper-muted: #6b6a66;
+  --feature: #139f58;
+  --on-feature: #000000;
+  --on-feature-muted: #042514;
+  --shade: #111111;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-highlight: var(--highlight);
+  --color-on-highlight: var(--on-highlight);
+  --color-paper: var(--paper);
+  --color-on-paper: var(--on-paper);
+  --color-on-paper-muted: var(--on-paper-muted);
+  --color-feature: var(--feature);
+  --color-on-feature: var(--on-feature);
+  --color-on-feature-muted: var(--on-feature-muted);
+  --color-shade: var(--shade);
+}
+
+/* Palette directions under review (?__variant=…). Remove the ones not chosen. */
+html[data-variant="paper"] {
+  --page: #f2ede4;
+  --surface: #e9e2d5;
+  --ink: #1d1b17;
+  --ink-muted: #5b5852;
+  --ink-subtle: #837f78;
+  --accent: #a8401d;
+  --on-accent: #fbf8f2;
+  --highlight: #e3c26b;
+  --on-highlight: #1d1b17;
+  --paper: #fbf8f2;
+  --on-paper: #1d1b17;
+  --on-paper-muted: #66645f;
+  --feature: #e9e2d5;
+  --on-feature: #1d1b17;
+  --on-feature-muted: #5e5b55;
+  --shade: #1d1b17;
+}
+
+html[data-variant="night"] {
+  --page: #12131c;
+  --surface: #0d0e15;
+  --ink: #efe8da;
+  --ink-muted: #8f8c88;
+  --ink-subtle: #6d6b6a;
+  --accent: #e2ac45;
+  --on-accent: #12131c;
+  --highlight: #e9734a;
+  --on-highlight: #12131c;
+  --paper: #efe8da;
+  --on-paper: #15161d;
+  --on-paper-muted: #62605f;
+  --feature: #1f2a5c;
+  --on-feature: #efe8da;
+  --on-feature-muted: #a3a3b0;
+  --shade: #05060a;
+}
+
+html[data-variant="ember"] {
+  --page: #1b1512;
+  --surface: #140f0c;
+  --ink: #f3e8d7;
+  --ink-muted: #958c81;
+  --ink-subtle: #746c63;
+  --accent: #ea6a42;
+  --on-accent: #1b1512;
+  --highlight: #f2b544;
+  --on-highlight: #1b1512;
+  --paper: #f3e8d7;
+  --on-paper: #1b1512;
+  --on-paper-muted: #665f57;
+  --feature: #a63c1c;
+  --on-feature: #f3e8d7;
+  --on-feature-muted: #f1e2d1;
+  --shade: #0a0706;
+}

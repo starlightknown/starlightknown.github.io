@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { isEnteringIframe } from "./pointer";
 
 const INTERACTIVE = "a, button, [data-cursor]";
-const SPARKLE_COLORS = ["#f4ed45", "#139f58", "#f4f1e8"];
+const SPARKLE_COLORS = ["var(--highlight)", "var(--accent)", "var(--paper)"];
 
 // Bubble text for links and buttons that don't set their own data-cursor
 function labelFor(element: HTMLElement) {
