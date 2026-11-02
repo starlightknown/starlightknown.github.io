@@ -97,16 +97,20 @@ export default function StarBuddy() {
 
   return (
     <div className="pointer-events-none fixed bottom-4 right-4 z-[60] flex flex-col items-end sm:bottom-6 sm:right-6">
+      {/* Always mounted, so screen readers announce each new line */}
+      <p role="status" className="sr-only">
+        {line}
+      </p>
       <AnimatePresence mode="wait">
         {line && (
           <motion.p
             key={line}
-            role="status"
+            aria-hidden="true"
             initial={{ opacity: 0, y: 8, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 26 }}
-            className="relative mb-3 max-w-[220px] origin-bottom-right border-2 border-black bg-[#f4f1e8] px-3 py-2 font-mono text-[11px] font-bold leading-snug text-black shadow-[4px_4px_0_#139f58]"
+            className="relative mb-3 max-w-[220px] origin-bottom-right border-2 border-black bg-[#f4f1e8] px-3 py-2 font-mono text-[11px] font-medium leading-snug text-black shadow-[4px_4px_0_#139f58]"
           >
             {line}
             <span className="absolute -bottom-[9px] right-6 size-4 rotate-45 border-b-2 border-r-2 border-black bg-[#f4f1e8]" />
@@ -126,7 +130,7 @@ export default function StarBuddy() {
           className="size-full overflow-visible drop-shadow-[3px_3px_0_#111]"
           animate={{ rotate: reducedMotion ? 0 : spins * 360 }}
           whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
+          whileTap={{ scale: 0.96 }}
           transition={{ type: "spring", stiffness: 160, damping: 14 }}
         >
           <path

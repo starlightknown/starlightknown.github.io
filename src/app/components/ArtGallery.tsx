@@ -116,55 +116,68 @@ function Polaroid({ piece, index, onOpen }: { piece: Artwork; index: number; onO
       )}
       <figcaption className="mt-4 flex items-baseline justify-between gap-3 px-1">
         <span className="font-display text-2xl leading-none">{piece.title}</span>
-        <span className="shrink-0 font-mono text-[10px] font-bold uppercase tracking-wider text-black/55">{piece.medium}</span>
+        <span className="shrink-0 font-mono text-[10px] font-medium uppercase tracking-wider text-black/55">{piece.medium}</span>
       </figcaption>
     </motion.figure>
   );
 }
 
 function Lightbox({ piece, onClose }: { piece: Artwork; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  // showModal makes the page behind inert and keeps focus inside; on unmount
+  // (after the exit animation) focus goes back to the painting that opened it
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    const dialog = dialogRef.current;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialog?.showModal();
+    return () => {
+      dialog?.close();
+      opener?.focus();
+    };
+  }, []);
 
   return (
-    <motion.div
-      role="dialog"
-      aria-modal="true"
+    <motion.dialog
+      ref={dialogRef}
       aria-label={piece.title}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      onClick={onClose}
-      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-5 backdrop-blur-sm"
+      // Escape: let the exit animation run instead of closing instantly
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+      className="m-0 size-full max-h-none max-w-none items-center justify-center bg-black/85 p-5 backdrop-blur-sm backdrop:bg-transparent open:flex"
     >
       <motion.figure
         initial={{ scale: 0.9, rotate: -3 }}
         animate={{ scale: 1, rotate: 0 }}
         exit={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        onClick={(event) => event.stopPropagation()}
         className="relative max-h-full border-2 border-black bg-[#f4f1e8] p-3 pb-4 text-black shadow-[10px_10px_0_#139f58]"
       >
         <img src={piece.src} alt={piece.title} className="block max-h-[78vh] w-auto max-w-full" />
         <figcaption className="mt-4 flex items-baseline justify-between gap-6 px-1">
           <span className="font-display text-3xl leading-none">{piece.title}</span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-black/55">{piece.medium}</span>
+          <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-black/55">{piece.medium}</span>
         </figcaption>
         <button
           type="button"
           onClick={onClose}
           data-cursor="close"
-          aria-label="Close"
+          aria-label={`Close ${piece.title}`}
           autoFocus
-          className="absolute -right-4 -top-4 flex size-10 items-center justify-center border-2 border-black bg-[#f4ed45] transition-transform hover:rotate-90"
+          className="absolute -right-4 -top-4 flex size-10 items-center justify-center border-2 border-black bg-[#f4ed45] transition-transform motion-safe:hover:rotate-90"
         >
           <X className="size-5" />
         </button>
       </motion.figure>
-    </motion.div>
+    </motion.dialog>
   );
 }
 
@@ -176,7 +189,7 @@ export default function ArtGallery() {
       <div className="mx-auto max-w-[1440px] px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
         <div className="mb-16 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-end">
           <div>
-            <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.22em]">02 / Side quests</p>
+            <p className="mb-5 font-mono text-xs font-medium uppercase tracking-[0.22em]">02 / Side quests</p>
             <h2 className="font-display text-5xl leading-[0.95] tracking-tight sm:text-7xl">
               Off the clock.
               <br />
@@ -184,13 +197,13 @@ export default function ArtGallery() {
             </h2>
           </div>
           <div>
-            <p className="max-w-md text-base leading-7 text-black/65">
+            <p className="max-w-md text-base leading-7 text-black/80">
               When I&apos;m not in a Discord thread, I&apos;m painting skies, nebulae, and small glowing worlds—or looping little
               scenes in Blender until they feel just right.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-2">
               {hobbies.map((hobby) => (
-                <span key={hobby} className="border border-black bg-[#f4f1e8] px-3 py-1.5 font-mono text-[11px] font-bold uppercase">
+                <span key={hobby} className="border border-black bg-[#f4f1e8] px-3 py-1.5 font-mono text-[11px] font-medium uppercase">
                   {hobby}
                 </span>
               ))}
@@ -199,10 +212,10 @@ export default function ArtGallery() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="follow"
-                className="group ml-1 inline-flex items-center gap-1.5 border border-black bg-black px-3 py-1.5 font-mono text-[11px] font-bold uppercase text-[#f4ed45] transition-colors hover:bg-[#f4ed45] hover:text-black"
+                className="group ml-1 inline-flex items-center gap-1.5 border border-black bg-black px-3 py-1.5 font-mono text-[11px] font-medium uppercase text-[#f4ed45] transition-colors hover:bg-[#f4ed45] hover:text-black"
               >
                 <Instagram className="size-3.5" /> More on Instagram
-                <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                <ArrowUpRight className="size-3.5 transition-transform motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5" />
               </a>
             </div>
           </div>
