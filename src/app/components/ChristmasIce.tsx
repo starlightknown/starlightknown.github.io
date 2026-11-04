@@ -148,7 +148,7 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
           type="button"
           data-cursor="break"
           aria-label={`${LABELS[Math.min(hits, LABELS.length - 1)]}. The card is frozen for Christmas`}
-          className="ice-sheet group absolute inset-0 touch-pan-y"
+          className="ice-block group absolute inset-0 touch-pan-y"
           onPointerDown={(event) => {
             pressed.current = true;
             const { x, y } = pointIn(event);
@@ -172,21 +172,36 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
             if (event.detail === 0) hit(50 + (Math.random() - 0.5) * 30, 50 + (Math.random() - 0.5) * 30);
           }}
         >
+          {/* Cartoon glints: two long shines top-left, a short one bottom-right */}
+          <span aria-hidden="true" className="ice-glint left-[7%] top-[11%] h-[5%] w-[30%]" />
+          <span aria-hidden="true" className="ice-glint left-[9%] top-[20%] h-[3.5%] w-[16%]" />
+          <span aria-hidden="true" className="ice-glint bottom-[12%] right-[7%] h-[3.5%] w-[14%]" />
+          {SPARKLES.map((sparkle, index) => (
+            <svg
+              key={index}
+              aria-hidden="true"
+              className="ice-sparkle"
+              viewBox="0 0 100 100"
+              style={{ left: sparkle.left, top: sparkle.top, width: sparkle.size, height: sparkle.size, animationDelay: sparkle.delay }}
+            >
+              <path d="M50 4 C54 36 64 46 96 50 C64 54 54 64 50 96 C46 64 36 54 4 50 C36 46 46 36 50 4 Z" fill="white" stroke={ICE_LINE} strokeWidth="7" strokeLinejoin="round" />
+            </svg>
+          ))}
           <svg aria-hidden="true" className="absolute inset-0 size-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             {cracks.map((crack) => (
               <g key={crack.id}>
                 {crack.paths.map((d, index) => (
                   <g key={index}>
-                    <path d={d} fill="none" stroke="rgb(70 110 140 / 0.55)" strokeWidth="3" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
-                    <path d={d} fill="none" stroke="white" strokeWidth="1.25" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+                    <path d={d} fill="none" stroke={ICE_LINE} strokeWidth="4" vectorEffect="non-scaling-stroke" strokeLinejoin="round" strokeLinecap="round" />
+                    <path d={d} fill="none" stroke="white" strokeWidth="1.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" strokeLinecap="round" />
                   </g>
                 ))}
               </g>
             ))}
           </svg>
-          <span className="ice-snowcap" aria-hidden="true" />
-          <span className="ice-icicles" aria-hidden="true" />
-          <span className="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-white bg-white/85 px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-wider text-[#1d3a52] shadow-sm">
+          <SnowCap />
+          <Icicles />
+          <span className="ice-label absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-wider">
             ❄ {LABELS[Math.min(hits, LABELS.length - 1)]}
           </span>
         </button>
@@ -196,10 +211,12 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
           {shards.map((shard, index) => {
             const dx = (shard.cx - 50) * (2 + Math.random() * 3);
             return (
-              <motion.div
+              <motion.svg
                 key={index}
-                className="ice-sheet absolute inset-0"
-                style={{ clipPath: `polygon(${shard.points.map(([x, y]) => `${x}% ${y}%`).join(", ")})`, transformOrigin: `${shard.cx}% ${shard.cy}%` }}
+                className="absolute inset-0 size-full overflow-visible"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                style={{ transformOrigin: `${shard.cx}% ${shard.cy}%` }}
                 initial={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
                 // Reduced motion: the shards fade where they are instead of flying
                 animate={
@@ -213,12 +230,63 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
                       }
                 }
                 transition={reducedMotion ? { duration: 0.6 } : { duration: 1 + Math.random() * 0.3, ease: [0.3, 0, 0.7, 1] }}
-              />
+              >
+                <polygon
+                  points={shard.points.map(([x, y]) => `${x},${y}`).join(" ")}
+                  fill={SHARD_FILLS[index % SHARD_FILLS.length]}
+                  stroke={ICE_LINE}
+                  strokeWidth="3"
+                  strokeLinejoin="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </motion.svg>
             );
           })}
         </div>
       )}
     </div>
+  );
+}
+
+// ---------- Cartoon trimmings ----------
+
+const ICE_LINE = "#1d3a52";
+const SHARD_FILLS = ["#d9f3fd", "#bfe8f8", "#a9def4", "#e9f9ff"];
+const SPARKLES = [
+  { left: "80%", top: "10%", size: 34, delay: "0s" },
+  { left: "11%", top: "68%", size: 26, delay: "0.8s" },
+  { left: "67%", top: "60%", size: 18, delay: "1.6s" },
+];
+
+// A puffy snow drift sitting on the top edge
+function SnowCap() {
+  return (
+    <svg aria-hidden="true" className="absolute -left-1.5 -top-7 h-10 w-[calc(100%+0.75rem)] overflow-visible" viewBox="0 0 200 36" preserveAspectRatio="none">
+      <path
+        d="M2 32 C0 20 8 12 18 16 C20 3 38 0 44 12 C50 1 66 1 70 14 C78 3 92 3 96 16 C102 3 118 1 124 14 C130 3 146 3 150 16 C156 3 172 3 176 14 C184 6 198 10 198 24 L198 32 Z"
+        fill="white"
+        stroke={ICE_LINE}
+        strokeWidth="3"
+        strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+}
+
+// Outlined icicles dripping off the bottom edge
+function Icicles() {
+  const drips = [
+    [6, 18], [14, 30], [21, 14], [30, 36], [39, 20], [47, 28], [55, 16], [63, 34], [72, 22], [80, 30], [88, 15], [94, 24],
+  ];
+  const d = `M3 0 ${drips.map(([x, depth]) => `L${x - 3} 0 L${x} ${depth} L${x + 3} 0`).join(" ")} L97 0 Z`;
+  return (
+    <svg aria-hidden="true" className="absolute left-0 top-full h-10 w-full overflow-visible" viewBox="0 0 100 40" preserveAspectRatio="none">
+      <path d={d} fill="#d4f0fb" stroke={ICE_LINE} strokeWidth="3" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+      {drips.map(([x, depth]) => (
+        <path key={x} d={`M${x - 1.2} 3 L${x - 0.3} ${depth * 0.6}`} stroke="white" strokeWidth="2" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+      ))}
+    </svg>
   );
 }
 
