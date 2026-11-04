@@ -20,6 +20,7 @@ import ArtGallery from "./components/ArtGallery";
 import SiteCursor from "./components/SiteCursor";
 import StarBuddy from "./components/StarBuddy";
 import { NightModeKeys, NightSky } from "./components/NightMode";
+import { ChristmasRadio, ICE_SHATTERED_EVENT, IceOverlay, Snowfall, isChristmasSeason } from "./components/ChristmasIce";
 import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT } from "./components/pointer";
 
 const experience = [
@@ -109,6 +110,8 @@ function ScratchIntro() {
   const revealedRef = useRef(false);
   const [burst, setBurst] = useState(0);
   const reducedMotion = useReducedMotion();
+  const [iced, setIced] = useState(isChristmasSeason);
+  const [radio, setRadio] = useState(false);
 
   const paintCover = useCallback(() => {
     const canvas = canvasRef.current;
@@ -147,6 +150,8 @@ function ScratchIntro() {
   }, [paintCover]);
 
   const reveal = () => {
+    // Revealing by keyboard focus or the button also melts the Christmas ice
+    setIced(false);
     if (revealedRef.current) return;
     revealedRef.current = true;
     setRevealed(true);
@@ -234,7 +239,16 @@ function ScratchIntro() {
         <br />
         ONE PART CODE
       </div>
-      <div className="border border-accent bg-accent p-2 shadow-[10px_10px_0_var(--shade)]">
+      <div className="relative border border-accent bg-accent p-2 shadow-[10px_10px_0_var(--shade)]">
+        {iced && (
+          <IceOverlay
+            onFirstHit={() => setRadio(true)}
+            onShattered={() => {
+              setIced(false);
+              window.dispatchEvent(new Event(ICE_SHATTERED_EVENT));
+            }}
+          />
+        )}
         <div className="flex items-center justify-between border-b border-on-accent/30 px-3 py-2 font-mono text-[10px] font-medium text-on-accent">
           <span>PORTFOLIO_ID: KT-63</span>
           <span className="flex items-center gap-1.5">
@@ -337,6 +351,7 @@ function ScratchIntro() {
           <CoinCursor />
         </div>
       )}
+      {radio && <ChristmasRadio onClose={() => setRadio(false)} />}
     </div>
   );
 }
@@ -344,6 +359,7 @@ function ScratchIntro() {
 export default function App() {
   const [activeSkills, setActiveSkills] = useState<keyof typeof skillGroups>("Community");
   const [tickerPaused, setTickerPaused] = useState(false);
+  const [christmas] = useState(isChristmasSeason);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -379,6 +395,7 @@ export default function App() {
 
       <section id="top" className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-14 px-5 pb-24 pt-16 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-20 lg:px-12 lg:pb-32 lg:pt-24">
         <NightSky />
+        {christmas && <Snowfall />}
         <div className="relative z-10">
           <div className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">
             <MapPin className="size-4 text-accent" /> Bangalore, India

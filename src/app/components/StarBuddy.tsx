@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CARD_COVERED_EVENT, CARD_REVEALED_EVENT, isEnteringIframe } from "./pointer";
 import { NIGHT_CHANGED_EVENT, NIGHT_TOGGLE_EVENT } from "./NightMode";
+import { ICE_SHATTERED_EVENT } from "./ChristmasIce";
 
 const LINES = [
   "psst… scratch the card up top ✦",
@@ -47,6 +48,10 @@ export default function StarBuddy() {
       say(REVEAL_LINE);
     };
     const onCovered = () => setLine((current) => (current === REVEAL_LINE ? null : current));
+    const onIce = () => {
+      setSpins((value) => value + 1);
+      say("It's tiiime! 🎄 Now scratch the card.", 6000);
+    };
     const onNight = (event: Event) => {
       const { night } = (event as CustomEvent<{ night: boolean }>).detail;
       setSpins((value) => value + 1);
@@ -86,6 +91,7 @@ export default function StarBuddy() {
     window.addEventListener(CARD_REVEALED_EVENT, onReveal);
     window.addEventListener(CARD_COVERED_EVENT, onCovered);
     window.addEventListener(NIGHT_CHANGED_EVENT, onNight);
+    window.addEventListener(ICE_SHATTERED_EVENT, onIce);
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerout", onOut);
     return () => {
@@ -95,6 +101,7 @@ export default function StarBuddy() {
       window.removeEventListener(CARD_REVEALED_EVENT, onReveal);
       window.removeEventListener(CARD_COVERED_EVENT, onCovered);
       window.removeEventListener(NIGHT_CHANGED_EVENT, onNight);
+      window.removeEventListener(ICE_SHATTERED_EVENT, onIce);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerout", onOut);
     };

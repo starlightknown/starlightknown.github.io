@@ -162,3 +162,79 @@ html.has-site-cursor dialog[open] button {
   0%, 100% { opacity: 0.15; }
   50% { opacity: 0.9; }
 }
+
+/* Christmas ice (see ChristmasIce.tsx). Fixed icy colours rather than palette
+   roles: ice looks the same by day and in night mode */
+.ice-sheet {
+  border: 1px solid rgb(255 255 255 / 0.85);
+  border-radius: 6px;
+  background:
+    radial-gradient(120% 80% at 20% 10%, rgb(255 255 255 / 0.65), transparent 60%),
+    linear-gradient(135deg, rgb(214 236 250 / 0.82), rgb(176 212 236 / 0.62) 45%, rgb(232 246 255 / 0.85));
+  box-shadow:
+    inset 0 0 28px rgb(255 255 255 / 0.75),
+    inset 0 0 2px rgb(120 170 205 / 0.6),
+    0 0 0 1px rgb(150 190 220 / 0.55);
+  backdrop-filter: blur(3px) saturate(1.15);
+  -webkit-backdrop-filter: blur(3px) saturate(1.15);
+}
+
+/* A snow cap along the top edge */
+.ice-snowcap {
+  position: absolute;
+  top: -10px;
+  left: -4px;
+  right: -4px;
+  height: 22px;
+  border-radius: 14px 14px 10px 10px;
+  background:
+    radial-gradient(14px 12px at 8% 70%, #fff 98%, transparent),
+    radial-gradient(18px 14px at 30% 60%, #fff 98%, transparent),
+    radial-gradient(16px 12px at 58% 70%, #fff 98%, transparent),
+    radial-gradient(20px 14px at 84% 55%, #fff 98%, transparent),
+    linear-gradient(#fff, #f1f8fd);
+  box-shadow: 0 2px 0 rgb(150 190 220 / 0.5);
+}
+
+/* Icicles hanging off the bottom edge */
+.ice-icicles {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -26px;
+  height: 26px;
+  background: linear-gradient(rgb(232 246 255 / 0.95), rgb(190 222 244 / 0.7));
+  clip-path: polygon(
+    0 0, 100% 0, 97% 40%, 94% 0, 89% 90%, 84% 0, 78% 55%, 72% 0, 66% 100%, 60% 0,
+    54% 45%, 48% 0, 42% 80%, 36% 0, 30% 50%, 24% 0, 18% 95%, 12% 0, 7% 45%, 3% 0
+  );
+}
+
+@media (hover: hover) {
+  .ice-sheet:hover {
+    box-shadow:
+      inset 0 0 34px rgb(255 255 255 / 0.9),
+      inset 0 0 2px rgb(120 170 205 / 0.6),
+      0 0 0 1px rgb(150 190 220 / 0.7);
+  }
+}
+
+/* Falling snow; under reduced motion the flakes just rest in place */
+.snowflake {
+  top: var(--rest-top, 10%);
+  background: #cfe3f1;
+  box-shadow: 0 0 0 1px rgb(120 160 190 / 0.25);
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .snowflake {
+    top: -10px;
+    animation: snowfall linear infinite;
+  }
+}
+
+@keyframes snowfall {
+  from { transform: translate(0, 0); }
+  to { transform: translate(var(--drift), 110vh); }
+}
