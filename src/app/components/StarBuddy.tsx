@@ -12,7 +12,7 @@ const LINES = [
   "Support tickets are just feature requests in disguise.",
   "Ship it! (after the docs, please)",
   "Go look at the donut. Trust me. 🍩",
-  "I know a secret: ↑ ↑ ↓ ↓ ← → ← → B A",
+  "I know a secret. Try typing \"night\". 🌙",
   "On a phone? Tap me five times, fast. 🌙",
 ];
 

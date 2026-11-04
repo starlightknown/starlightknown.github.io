@@ -7,7 +7,7 @@ export function consoleHello() {
       "Peeking under the hood? Same. The source is open:\n" +
       "https://github.com/starlightknown/starlightknown.github.io\n\n" +
       "Good first issues welcome, typo fixes celebrated.\n" +
-      "Psst: try ↑ ↑ ↓ ↓ ← → ← → B A on the page.\n\n" +
+      "Psst: click the page and type \"night\".\n\n" +
       "— Karuna",
     title,
     body,
