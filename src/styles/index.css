@@ -220,6 +220,39 @@ html.has-site-cursor dialog[open] button {
   50% { opacity: 0.35; scale: 0.7; }
 }
 
+/* A paper luggage tag tied to the hammer */
+.ice-tag {
+  border: 2px solid #1d3a52;
+  border-radius: 12px 4px 4px 12px;
+  background: #fbf8f2;
+  color: #1d3a52;
+  box-shadow: 3px 3px 0 #1d3a52;
+}
+
+.ice-tag::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  translate: 0 -50%;
+  border: 2px solid #1d3a52;
+  border-radius: 999px;
+  background: #c4e9f8;
+}
+
+/* The string from the tag's hole to the hammer handle */
+.ice-tag::after {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  width: 30px;
+  border-top: 2px dashed #1d3a52;
+  rotate: 14deg;
+}
+
 .ice-label {
   border: 2px solid #1d3a52;
   background: #fff;

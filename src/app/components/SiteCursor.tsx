@@ -60,8 +60,8 @@ export default function SiteCursor() {
       target.y = event.clientY;
 
       const element = event.target instanceof Element ? event.target : null;
-      // The scratch card draws its own coin cursor
-      const overCanvas = element?.closest("canvas") != null;
+      // The scratch card draws its own coin cursor, the Christmas ice a hammer
+      const overCanvas = element?.closest("canvas, [data-own-cursor]") != null;
       const interactive = element?.closest(INTERACTIVE) as HTMLElement | null;
       const root = document.documentElement;
       root.dataset.siteCursor = overCanvas ? "hidden" : interactive ? "hover" : "default";

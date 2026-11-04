@@ -121,6 +121,18 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
   const lastScratch = useRef<{ x: number; y: number; time: number } | null>(null);
   const pressed = useRef(false);
   const reducedMotion = useReducedMotion();
+  // The hammer: "held" follows a mouse over the ice; "tap" pops up briefly
+  // where a finger or the keyboard hits
+  const [hammer, setHammer] = useState<{ x: number; y: number; mode: "held" | "tap" } | null>(null);
+  const [swing, setSwing] = useState(0);
+  const tapTimer = useRef<number | undefined>(undefined);
+
+  const swingAt = (x: number, y: number, mode: "held" | "tap") => {
+    setHammer({ x, y, mode });
+    setSwing((value) => value + 1);
+    window.clearTimeout(tapTimer.current);
+    if (mode === "tap") tapTimer.current = window.setTimeout(() => setHammer(null), 600);
+  };
 
   const hit = (x: number, y: number) => {
     if (shattering) return;
@@ -146,22 +158,31 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
       {!shattering && (
         <button
           type="button"
-          data-cursor="break"
+          data-own-cursor
           aria-label={`${LABELS[Math.min(hits, LABELS.length - 1)]}. The card is frozen for Christmas`}
           className="ice-block group absolute inset-0 touch-pan-y"
+          onPointerEnter={(event) => {
+            if (event.pointerType !== "touch") setHammer({ x: event.clientX, y: event.clientY, mode: "held" });
+          }}
+          onPointerLeave={(event) => {
+            if (event.pointerType !== "touch") setHammer(null);
+          }}
           onPointerDown={(event) => {
             pressed.current = true;
             const { x, y } = pointIn(event);
             lastScratch.current = { x, y, time: event.timeStamp };
+            swingAt(event.clientX, event.clientY, event.pointerType === "touch" ? "tap" : "held");
             hit(x, y);
           }}
           // Scratching across the ice counts too, about four times a second
           onPointerMove={(event) => {
+            if (event.pointerType !== "touch") setHammer({ x: event.clientX, y: event.clientY, mode: "held" });
             if (!pressed.current || !lastScratch.current) return;
             const { x, y } = pointIn(event);
             const moved = Math.hypot(x - lastScratch.current.x, y - lastScratch.current.y);
             if (moved > 12 && event.timeStamp - lastScratch.current.time > 250) {
               lastScratch.current = { x, y, time: event.timeStamp };
+              swingAt(event.clientX, event.clientY, event.pointerType === "touch" ? "tap" : "held");
               hit(x, y);
             }
           }}
@@ -169,13 +190,18 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
           onPointerCancel={() => (pressed.current = false)}
           onClick={(event) => {
             // Keyboard activation (Enter/Space) arrives as a click with no pointer
-            if (event.detail === 0) hit(50 + (Math.random() - 0.5) * 30, 50 + (Math.random() - 0.5) * 30);
+            if (event.detail !== 0) return;
+            const x = 50 + (Math.random() - 0.5) * 30;
+            const y = 50 + (Math.random() - 0.5) * 30;
+            const rect = event.currentTarget.getBoundingClientRect();
+            swingAt(rect.left + (rect.width * x) / 100, rect.top + (rect.height * y) / 100, "tap");
+            hit(x, y);
           }}
         >
           {/* Cartoon glints: two long shines top-left, a short one bottom-right */}
           <span aria-hidden="true" className="ice-glint left-[7%] top-[11%] h-[5%] w-[30%]" />
           <span aria-hidden="true" className="ice-glint left-[9%] top-[20%] h-[3.5%] w-[16%]" />
-          <span aria-hidden="true" className="ice-glint bottom-[12%] right-[7%] h-[3.5%] w-[14%]" />
+          <span aria-hidden="true" className="ice-glint right-[7%] top-[40%] h-[3.5%] w-[14%]" />
           {SPARKLES.map((sparkle, index) => (
             <svg
               key={index}
@@ -201,10 +227,40 @@ export function IceOverlay({ onFirstHit, onShattered }: { onFirstHit: () => void
           </svg>
           <SnowCap />
           <Icicles />
+          {/* The hammer rests on the ice until a mouse picks it up */}
+          {hammer?.mode !== "held" && (
+            <span aria-hidden="true" className="pointer-events-none absolute bottom-[5%] left-[3%] size-20 -scale-x-100 rotate-[14deg] sm:size-24">
+              <Hammer />
+            </span>
+          )}
+          {/* Bottom-left, clear of the star buddy in the bottom-right corner */}
+          <span className="ice-tag pointer-events-none absolute bottom-[9%] left-[27%] rotate-2 py-2 pl-6 pr-3 text-start sm:left-[20%]">
+            <span className="block font-display text-sm italic leading-tight sm:text-base">This is a good ice breaker</span>
+            <span className="block font-mono text-[10px] font-medium uppercase tracking-wider">(literally)</span>
+          </span>
           <span className="ice-label absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-wider">
             ❄ {LABELS[Math.min(hits, LABELS.length - 1)]}
           </span>
         </button>
+      )}
+      {hammer && !shattering && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed left-0 top-0 z-[60] size-[112px]"
+          // The striking face of the head sits on the pointer
+          style={{ transform: `translate3d(${hammer.x - 112 * 0.12}px, ${hammer.y - 112 * 0.47}px, 0)` }}
+        >
+          <motion.div
+            key={swing}
+            className="size-full"
+            style={{ transformOrigin: "88% 88%" }}
+            initial={{ rotate: 14 }}
+            animate={swing ? { rotate: [14, 38, -12, 8] } : { rotate: 14 }}
+            transition={{ duration: 0.32, times: [0, 0.35, 0.7, 1], ease: "easeOut" }}
+          >
+            <Hammer />
+          </motion.div>
+        </div>
       )}
       {shattering && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -257,6 +313,22 @@ const SPARKLES = [
   { left: "11%", top: "68%", size: 26, delay: "0.8s" },
   { left: "67%", top: "60%", size: 18, delay: "1.6s" },
 ];
+
+// A cartoon mallet: steel head up-left, wooden handle down-right
+function Hammer() {
+  return (
+    <svg viewBox="0 0 100 100" className="size-full overflow-visible">
+      <line x1="38" y1="28" x2="88" y2="88" stroke={ICE_LINE} strokeWidth="19" strokeLinecap="round" />
+      <line x1="38" y1="28" x2="88" y2="88" stroke="#c98a4b" strokeWidth="12" strokeLinecap="round" />
+      <line x1="54" y1="50" x2="80" y2="81" stroke="#e7b77f" strokeWidth="3" strokeLinecap="round" />
+      <g transform="rotate(-40 36 26)">
+        <rect x="4" y="9" width="64" height="34" rx="8" fill="#a9b6c2" stroke={ICE_LINE} strokeWidth="4" />
+        <rect x="4" y="9" width="13" height="34" rx="6" fill="#7f8e9c" stroke={ICE_LINE} strokeWidth="4" />
+        <rect x="23" y="15" width="36" height="6" rx="3" fill="white" opacity="0.85" />
+      </g>
+    </svg>
+  );
+}
 
 // A puffy snow drift sitting on the top edge
 function SnowCap() {
