@@ -162,3 +162,120 @@ html.has-site-cursor dialog[open] button {
   0%, 100% { opacity: 0.15; }
   50% { opacity: 0.9; }
 }
+
+/* Christmas ice (see ChristmasIce.tsx): cartoon style, with a bold outline
+   and hard shadow like the rest of the site. Fixed icy colours rather than
+   palette roles, so the ice looks the same by day and in night mode */
+.ice-block {
+  border: 3px solid #1d3a52;
+  border-radius: 14px;
+  background: linear-gradient(
+    168deg,
+    rgb(233 249 255 / 0.95) 0 30%,
+    rgb(196 233 248 / 0.94) 30% 72%,
+    rgb(170 222 243 / 0.95) 72%
+  );
+  box-shadow:
+    6px 6px 0 #1d3a52,
+    inset 0 0 0 6px rgb(255 255 255 / 0.55),
+    inset 0 -10px 0 6px rgb(140 205 232 / 0.35);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+@media (hover: hover) {
+  .ice-block:hover {
+    background: linear-gradient(
+      168deg,
+      rgb(240 251 255 / 0.96) 0 30%,
+      rgb(206 238 250 / 0.95) 30% 72%,
+      rgb(180 227 246 / 0.96) 72%
+    );
+  }
+}
+
+/* White shine bars */
+.ice-glint {
+  position: absolute;
+  border-radius: 999px;
+  background: #fff;
+  rotate: -28deg;
+  pointer-events: none;
+}
+
+.ice-sparkle {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ice-sparkle {
+    animation: ice-twinkle 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes ice-twinkle {
+  0%, 100% { opacity: 1; scale: 1; }
+  50% { opacity: 0.35; scale: 0.7; }
+}
+
+/* A paper luggage tag tied to the hammer */
+.ice-tag {
+  border: 2px solid #1d3a52;
+  border-radius: 12px 4px 4px 12px;
+  background: #fbf8f2;
+  color: #1d3a52;
+  box-shadow: 3px 3px 0 #1d3a52;
+}
+
+.ice-tag::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  translate: 0 -50%;
+  border: 2px solid #1d3a52;
+  border-radius: 999px;
+  background: #c4e9f8;
+}
+
+/* The string from the tag's hole to the hammer handle */
+.ice-tag::after {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  width: 30px;
+  border-top: 2px dashed #1d3a52;
+  rotate: 14deg;
+}
+
+.ice-label {
+  border: 2px solid #1d3a52;
+  background: #fff;
+  color: #1d3a52;
+  box-shadow: 3px 3px 0 #1d3a52;
+}
+
+/* Falling snow; under reduced motion the flakes just rest in place */
+.snowflake {
+  top: var(--rest-top, 10%);
+  background: #cfe3f1;
+  box-shadow: 0 0 0 1px rgb(120 160 190 / 0.25);
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .snowflake {
+    top: -10px;
+    animation: snowfall linear infinite;
+  }
+}
+
+@keyframes snowfall {
+  from { transform: translate(0, 0); }
+  to { transform: translate(var(--drift), 110vh); }
+}
